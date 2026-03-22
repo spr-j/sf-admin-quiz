@@ -3,14 +3,14 @@
 Salesforce 認定上級アドミニストレーター試験の練習問題集です。
 GitHub Pages でホストされたインタラクティブなクイズアプリとして利用できます。
 
-**[クイズを始める](https://spr-j.github.io/sf-admin-quiz/)**
+**[クイズを始める](https://spr-j.github.io/sf-admin2-quiz/)**
 
 ## 収録クイズ
 
 | クイズ | 問題数 | 内容 |
 |--------|--------|------|
-| [認定上級アドミニストレーター (V2022)](https://spr-j.github.io/sf-admin-quiz/Salesforce.Plat-Admn-301.v2022.html) | 129問 | Salesforce.Plat-Admn-301.v2022 |
-| [認定Platformアドミニストレーター上級 (V2026)](https://spr-j.github.io/sf-admin-quiz/Salesforce.Plat-Admn-301.v2026.html) | 77問 | Salesforce.Plat-Admn-301.v2026-01-15 |
+| [認定上級アドミニストレーター (V2022)](https://spr-j.github.io/sf-admin2-quiz/Salesforce.Plat-Admn-301.v2022.html) | 129問 | Salesforce.Plat-Admn-301.v2022 |
+| [認定Platformアドミニストレーター上級 (V2026)](https://spr-j.github.io/sf-admin2-quiz/Salesforce.Plat-Admn-301.v2026.html) | 77問 | Salesforce.Plat-Admn-301.v2026-01-15 |
 
 ## 機能
 
