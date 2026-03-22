@@ -1,0 +1,1871 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salesforce Admin II Prep Exam (v2026-01-15 q77)</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>/* Base and Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
+    --success: #10b981;
+    --success-bg: rgba(16, 185, 129, 0.1);
+    --danger: #ef4444;
+    --danger-bg: rgba(239, 68, 68, 0.1);
+    --option-bg: rgba(255, 255, 255, 0.03);
+    --option-hover: rgba(255, 255, 255, 0.08);
+    --option-selected: rgba(59, 130, 246, 0.2);
+    --option-selected-border: #3b82f6;
+    --radius: 12px;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-gradient);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+    overflow-x: hidden;
+}
+
+#app {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(to right, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.header-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    padding: 0 0.5rem;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+#progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    width: 0%;
+    transition: width 0.4s ease;
+}
+
+/* Main Content: Glass Panel */
+.glass-panel {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.question-header {
+    margin-bottom: 1.5rem;
+}
+
+#question-text {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    white-space: pre-line;
+}
+
+/* Options */
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.option-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background: var(--option-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    color: var(--text-main);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    gap: 1rem;
+}
+
+.option-btn:hover:not(.disabled) {
+    background: var(--option-hover);
+    transform: translateY(-2px);
+}
+
+.option-btn.selected {
+    background: var(--option-selected);
+    border-color: var(--option-selected-border);
+}
+
+.option-btn.correct {
+    background: var(--success-bg);
+    border-color: var(--success);
+}
+
+.option-btn.incorrect {
+    background: var(--danger-bg);
+    border-color: var(--danger);
+}
+
+.option-btn.disabled {
+    cursor: default;
+    opacity: 0.8;
+}
+
+.option-label {
+    font-weight: 600;
+    color: var(--text-muted);
+    min-width: 24px;
+}
+
+/* Feedback Box */
+.feedback-box {
+    padding: 1.25rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    font-weight: 500;
+    animation: slideDown 0.3s ease forwards;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.feedback-correct {
+    background: var(--success-bg);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.feedback-incorrect {
+    background: var(--danger-bg);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    outline: none;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.39);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.controls-extra {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--glass-border);
+}
+
+.btn-accent {
+    background: #8b5cf6;
+    color: white;
+    box-shadow: 0 4px 14px 0 rgba(139, 92, 246, 0.3);
+}
+
+.btn-accent:hover:not(:disabled) {
+    background: #7c3aed;
+    transform: translateY(-1px);
+}
+
+.btn-danger-outline {
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid var(--danger);
+}
+
+.btn-danger-outline:hover:not(:disabled) {
+    background: var(--danger-bg);
+}
+
+@media (max-width: 600px) {
+    .controls {
+        flex-direction: column;
+    }
+    .controls-extra {
+        flex-direction: row;
+    }
+    .btn {
+        width: 100%;
+    }
+}
+
+/* Glossary Section */
+.glossary-section {
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 800px;
+}
+
+.glossary-toggle {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text-muted);
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    transition: all 0.2s;
+    justify-content: center;
+}
+
+.glossary-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+}
+
+.glossary-body {
+    display: none;
+    margin-top: 1rem;
+    overflow-x: auto;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+}
+
+.glossary-body.show {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    min-width: 500px;
+}
+
+th {
+    background: rgba(255, 255, 255, 0.05);
+    color: #60a5fa;
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+    vertical-align: top;
+}
+
+td:first-child { width: 40px; color: var(--text-muted); }
+td:nth-child(2) { width: 180px; font-weight: 600; color: #60a5fa; }
+
+tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Results View Styling */
+.results-view {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    animation: fadeIn 0.6s ease;
+}
+
+.result-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    text-align: center;
+}
+
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.stat-item {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--glass-border);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+    display: block;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.category-stats table, .answer-list table {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.knowledge-summary {
+    text-align: left;
+    margin-top: 2rem;
+}
+
+.knowledge-point {
+    background: rgba(239, 68, 68, 0.05);
+    border-left: 4px solid var(--danger);
+    padding: 1.5rem;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 1.5rem;
+}
+
+.kp-title {
+    font-weight: 700;
+    color: #f87171;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.kp-content {
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge-success { background: var(--success); color: white; }
+.badge-danger { background: var(--danger); color: white; }
+
+.btn-reset {
+    margin-top: 2rem;
+    background: #475569;
+}
+
+/* New Analysis Components */
+.pass-fail-banner {
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.pass-banner {
+    background: var(--success);
+    color: white;
+}
+.fail-banner {
+    background: var(--danger);
+    color: white;
+}
+
+.priority-box {
+    background: rgba(251, 191, 36, 0.1);
+    border: 1px solid #fbbf24;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    text-align: left;
+}
+.priority-box h4 {
+    color: #fbbf24;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.answer-history-table {
+    font-size: 0.8rem !important;
+}
+
+.answer-history-table td {
+    padding: 0.5rem !important;
+}
+
+.icon-correct { color: var(--success); font-weight: bold; }
+.icon-incorrect { color: var(--danger); font-weight: bold; }
+
+.multi-choice-badge {
+    background: var(--danger);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+}
+
+.history-link {
+    color: #60a5fa;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 600;
+}
+.history-link:hover {
+    color: #93c5fd;
+}
+
+.history-scroll {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+</style>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>Salesforce Admin II Prep Exam (v2026-01-15 q77)</h1>
+            <div class="header-stats">
+                <span id="score-display">Score: 0 / 0</span>
+                <span id="progress-display">Question: 1 / 77</span>
+            </div>
+            <div class="progress-bar-container">
+                <div id="progress-bar"></div>
+            </div>
+        </header>
+
+        <section class="glossary-section">
+            <button class="glossary-toggle" id="glossary-toggle">
+                <span class="arrow">▼</span> 重要用語集を表示
+            </button>
+            <div class="glossary-body" id="glossary-body">
+                <table>
+                    <thead>
+                        <tr><th>#</th><th>用語</th><th>定義</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>検証ルール (Validation Rule)</td><td>ユーザーが入力したデータが特定の基準を満たしているか確認し、満たさない場合は保存を阻止する。</td></tr>
+                        <tr><td>2</td><td>レコードトリガーフロー</td><td>レコードの作成、更新、または削除によってトリガーされる自動化プロセス。</td></tr>
+                        <tr><td>3</td><td>主従関係 (Master-Detail)</td><td>親（主）レコードが子（従）レコードの動作（削除や共有）を制御する密接な関係。</td></tr>
+                        <tr><td>4</td><td>連結オブジェクト (Junction Object)</td><td>2つの主従関係を持ち、多対多の関係を構築するために使用されるカスタムオブジェクト。</td></tr>
+                        <tr><td>5</td><td>クロスオブジェクト数式</td><td>関連する親オブジェクトの項目を参照して値を表示する数式。</td></tr>
+                        <tr><td>6</td><td>共有ルール (Sharing Rules)</td><td>OWD（組織全体のデフォルト）設定を拡張し、特定の条件や所有者に基づいてアクセス権を付与する。</td></tr>
+                        <tr><td>7</td><td>価格表 (Price Book)</td><td>製品のリストと、特定の市場や顧客向けの価格設定を管理する。</td></tr>
+                        <tr><td>8</td><td>変更セット (Change Sets)</td><td>あるSalesforce組織（サンドボックス等）から別の組織（本番等）へメタデータを移行するツール。</td></tr>
+                        <tr><td>9</td><td>個人アカウント (Person Account)</td><td>法人ではなく、個人消費者を管理するための特別なアカウント形式。</td></tr>
+                        <tr><td>10</td><td>Data Mask（データマスキング）</td><td>テスト環境において、実データの機密性を保つためにデータを匿名化・架空化する。</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <main class="quiz-container">
+            <div id="quiz-card" class="glass-panel">
+                <div class="question-header">
+                    <h2 id="question-title">Loading...</h2>
+                </div>
+                
+                <div class="question-body">
+                    <p id="question-text"></p>
+                </div>
+                
+                <div class="options-container" id="options-container">
+                    <!-- Options injected here by JS -->
+                </div>
+                
+                <div class="feedback-box" id="feedback-box" style="display: none;">
+                    <!-- Feedback injected here -->
+                </div>
+                
+                <div class="controls">
+                    <button class="btn btn-secondary" id="btn-prev" disabled>Previous</button>
+                    <button class="btn btn-primary" id="btn-submit">Submit Answer</button>
+                    <button class="btn btn-primary" id="btn-next" style="display: none;">Next Question</button>
+                </div>
+                <div class="controls-extra">
+                    <button class="btn btn-accent" id="btn-show-result" onclick="showResult()">Result</button>
+                    <button class="btn btn-danger-outline" id="btn-reset" onclick="resetQuiz()">Reset</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+const testData = [
+  {
+    "question": "営業部長は、すべての商談に営業エンジニアまたはアカウント エグゼクティブのいずれかが割り当てられていることを確認したいと考えています。管理者はこの要件をどのように満たすべきでしょうか？",
+    "options": [
+      "フィールドが空白かどうかをチェックし、商談を保存するためにフィールドの1つが入力されていることを要求する検証ルールを記述する。",
+      "営業エンジニアの取引とアカウントエグゼクティブの取引をそれぞれ記録するために、異なるレコードタイプを作成する。",
+      "ページレイアウトで営業エンジニアとアカウントエグゼクティブの参照フィールドを必須にする。",
+      "これらのフィールドのいずれかが入力されていない状態で商談が作成された場合は、所有者にタスクを割り当てる。"
+    ],
+    "answer": "A",
+    "explanation": "検証ルールは、特定の条件を満たさないレコードの保存を禁止することで、データ品質を強化できます。この場合、検証ルールは「営業エンジニア」と「アカウントエグゼクティブ」の参照フィールドが両方とも空白かどうかを確認し、空白の場合はエラーメッセージを表示します。これにより、すべての商談にいずれかが割り当てられていることを確認できます。",
+    "category": "自動化プロセス"
+  },
+  {
+    "question": "ユーザーがリモートワークを始めましたが、ログインに問題が発生しています。何が問題なのでしょうか？",
+    "options": [
+      "このユーザーのログイン セッションの有効期限が切れました。",
+      "モバイル デバイスからサインインしています。",
+      "プロファイルのタイムゾーンがログイン時間外です。",
+      "ユーザーはプロファイルの IP 範囲内にありません。"
+    ],
+    "answer": "D",
+    "explanation": "IP範囲は、特定のIPアドレスからのSalesforceへのログインアクセスを制限する設定です。管理者は組織レベルまたはプロファイルレベルでIP範囲を設定できます。ユーザーが許可されている範囲外のIPからログインしようとするとアクセスできなくなります。",
+    "category": "権限・セキュリティ"
+  },
+  {
+    "question": "Cloud Kicks はレコードを削除する新しいフローを作成しました。フローをテストする際に管理者は何を考慮すべきでしょうか？",
+    "options": [
+      "削除要素を含むフローは、フロー デバッグ ツールではデバッグできません。",
+      "フローが非アクティブな場合でも、フローをデバッグするとテスト レコードが削除されます。",
+      "デバッグ時にフローによって削除されたレコードは物理的に削除されます。",
+      "テスト レコードが実際に削除されないようにするには、削除要素を含むフローを非アクティブ化する必要があります。"
+    ],
+    "answer": "B",
+    "explanation": "フローのデバッグでは、フローに定義されているアクション（レコードの削除など）が実際に実行されます。したがって、削除要素がある場合、フローが非アクティブであっても、デバッグを実行するとテストレコードが削除されます。",
+    "category": "自動化プロセス"
+  },
+  {
+    "question": "営業担当者は商談のクロスセルを支援する必要がありますが、レコードを更新したり商談チームを更新したりすることができません。営業担当者が商談チームに担当者を追加するには、どの 2つのオプションが必要ですか？(2つ選択）",
+    "options": [
+      "商談の所有権を営業担当者に譲渡する",
+      "取引先オブジェクトの編集権限",
+      "役割階層内で商談所有者より上位の役割",
+      "取引先の所有権を営業担当者に譲渡する"
+    ],
+    "answer": "B,C",
+    "explanation": "商談チームにユーザーを追加するには、商談に関連付けられた取引先に対する編集権限が必要です。また、商談を所有しているか、役割階層において所有者より上位の権限を持っている必要があります。",
+    "category": "営業・マーケティング"
+  },
+  {
+    "question": "レコードページの読み込み時間が長くなっている問題に対処するために、管理者が利用できる3つのオプションは何ですか？(3つ選択）",
+    "options": [
+      "一部のページ コンポーネントをタブの後ろに移動します。",
+      "表示されているフィールドの一部を削除します。",
+      "不要な検証ルールを無効にします。",
+      "すべてのプロセス ビルダーをフローに変換します。",
+      "表示される関連リストの数を減らします。"
+    ],
+    "answer": "A,B,E",
+    "explanation": "ページコンポーネントをタブの背後に移動すると、必要になるまで非表示にできるため読み込み時間を短縮できます。フィールド数を減らすと計算クエリが最小限になり、関連リストを減らすと取得するデータ量が制限され、パフォーマンスが向上します。",
+    "category": "データ管理"
+  },
+  {
+    "question": "顧客にステータス更新メールを配信するフローで、メールが届かない問題が発生しています。管理者は問題を調査するためにどこを確認すればよいでしょうか？",
+    "options": [
+      "一時停止中のフローインタビュー",
+      "プロセス自動化設定",
+      "メールログ",
+      "セットアップ監査証跡"
+    ],
+    "answer": "C",
+    "explanation": "メールログには、送受信された各メールの送信者、受信者、ステータス、エラーコードなどの詳細が含まれます。これを使用して、メールが正常に送信されたか、エラーが発生したかを確認できます。",
+    "category": "サービス・サポート"
+  },
+  {
+    "question": "関連する商談が少なくとも1つ作成されたときに、取引先の「商談が作成されました」チェックボックスが自動的に更新されるようにするには、何を使用すべきですか？",
+    "options": [
+      "画面フロー",
+      "ワークフロールール",
+      "レコードトリガーフロー",
+      "割り当てルール"
+    ],
+    "answer": "C",
+    "explanation": "レコードトリガーフローは、レコードの作成や更新時に実行されるアクションを自動化できます。関連する商談が作成された際に、取引先の項目を更新するのに適しています。",
+    "category": "自動化プロセス"
+  },
+  {
+    "question": "今年から売上があり、過去30日間にアクティビティが完了した取引先をリストするレポートを作成します。商談の詳細をリストせずに取引先のリストのみを提供するには、何を使用すべきですか？",
+    "options": [
+      "結合レポート",
+      "クロスフィルター",
+      "概要レポート",
+      "フィルタロジック"
+    ],
+    "answer": "B",
+    "explanation": "クロスフィルターを使用すると、関連オブジェクト（商談やアクティビティ）の有無やその項目に基づいてレコードを絞り込むことができます。",
+    "category": "レポート・ダッシュボード"
+  },
+  {
+    "question": "「次のステップ」フィールドを作成し、ユーザーがテキストの書式を設定でき、コンバージョン時に商談にマッピングできる必要があります。どのタイプが適切ですか？",
+    "options": [
+      "数式（テキスト）",
+      "テキストエリア（長）",
+      "テキストエリア",
+      "テキストエリア（リッチ）"
+    ],
+    "answer": "D",
+    "explanation": "テキストエリア（リッチ）フィールドはフォントや色、画像の書式設定が可能で、リードコンバージョン時の商談へのマッピングもサポートされています。",
+    "category": "データ管理"
+  },
+  {
+    "question": "機密情報を含むレコードの不必要なエクスポートを制限するために、管理者が推奨すべき機能はどれですか？",
+    "options": [
+      "Salesforce プラットフォームの暗号化",
+      "エクスポートデータ設定",
+      "Salesforce シールド",
+      "ミュートされた権限セット"
+    ],
+    "answer": "C",
+    "explanation": "Salesforce Shield（シールド）はイベント監視、暗号化、監査証跡機能を含み、セキュリティを強化します。データエクスポートの制御についても有効です。",
+    "category": "権限・セキュリティ"
+  },
+  {
+    "question": "特定の資産レコード（設置製品）がない取引先を表示するレポートを作成するにはどうすればよいですか？",
+    "options": [
+      "レポート ビルダーで PREVGROUPVAL() を使用します。",
+      "ロール階層フィルターを使用して関連レコードを制限します。",
+      "バケット列を含む概要レポートを使用します。",
+      "WITHOUT ロジックでクロス フィルターを使用します。"
+    ],
+    "answer": "D",
+    "explanation": "WITHOUTロジックを使用したクロスフィルターは、特定の関連レコードが欠落している（資産のない）取引先を抽出するのに最適です。",
+    "category": "レポート・ダッシュボード"
+  },
+  {
+    "question": "同じオブジェクトに複数の「保存前」レコードトリガーフローがある場合、実行順序について考慮すべき点は何ですか？",
+    "options": [
+      "フロー タイプによって実行順序が決まります。",
+      "フローの最終作成日によって順序が決まります。",
+      "フロー実行の順序は予測できません。",
+      "フローは名に基づいてアルファベット順に実行されます。"
+    ],
+    "answer": "C",
+    "explanation": "同じオブジェクト・トリガー種別に複数のフローがある場合、実行順序は保証されず、予測できません。可能であれば1つのフローに統合することが推奨されます。",
+    "category": "自動化プロセス"
+  },
+  {
+    "question": "「複数の取引先への連絡先」機能を実装し、直接の連絡先と関連（間接）連絡先を区別するにはどうすればよいですか？",
+    "options": [
+      "連絡先と関連する連絡先の関連リストの両方を表示する。",
+      "ページレイアウトに関連取引先の関連リストを表示する。",
+      "関連する連絡先の関連リストを表示し、直接フィールドを追加する。",
+      "連絡先関連リストを表示し、関連フィールドを追加する。"
+    ],
+    "answer": "C",
+    "explanation": "関連連絡先の関連リストを表示し、「直接」フィールド（Direct field）をリストに追加することで、その取引先に直接関連付けられているかどうかがひと目で分かります。",
+    "category": "データ管理"
+  },
+  {
+    "question": "変更セットを使用して本番環境への展開を成功させるためのベストプラクティスはどれですか？(2つ選択）",
+    "options": [
+      "変更セットを複製して、忘れられた依存コンポーネントを追加する。",
+      "送信変更セットに権限とアクセス設定を追加する。",
+      "本番環境へのアップロード前に、サンドボックス内でデプロイメント検証を実行する。",
+      "新しいレコードタイプは、それ単体でデプロイする。"
+    ],
+    "answer": "B,C",
+    "explanation": "権限やアクセス設定を含めることでデプロイ後のアクセス問題を回避できます。また、デプロイメント検証により、実際に変更を加える前にエラーや競合を特定できます。",
+    "category": "環境管理・展開"
+  },
+  {
+    "question": "Web-to-リードで新しい選択肢を追加したが、担当者が処理しようとするとエラーが発生します。原因を評価するツールは何ですか？",
+    "options": [
+      "ログイン履歴",
+      "デバッグログ",
+      "セットアップ監査ログ",
+      "項目履歴管理"
+    ],
+    "answer": "B",
+    "explanation": "デバッグログは、システムプロセスやエラー情報を取得し、ワークフローや検証ルールなどのトラブルシューティングに役立ちます。",
+    "category": "環境管理・展開"
+  },
+  {
+    "question": "暗号化フィールドに適切な桁数（例：クレジットカード16桁）が入力されていることを確認するにはどうすればよいですか？",
+    "options": [
+      "クレジットカード番号マスク タイプを使用します。",
+      "マスク文字の数を定義します。",
+      "フィールド レベルの桁数を入力します。",
+      "長さを確認するための検証ルールを作成します。"
+    ],
+    "answer": "D",
+    "explanation": "暗号化フィールドであっても、検証ルール（入力規則）を使用して値の長さをチェックし、保存を制限することが可能です。",
+    "category": "データ管理"
+  },
+  {
+    "question": "「応募者が複数の求人に、各求人に複数の応募がある」多対多の関係を構築するには、オブジェクトをどう構成すべきですか？",
+    "options": [
+      "求人応募を、応募項目との主従関係と求人掲載項目との参照関係を持つ連結オブジェクトとする。",
+      "求人広告との主従関係と求人応募との参照関係を持つ連結オブジェクトとする。",
+      "応募者を、投稿と求人応募の両方に主従関係を持つ連結オブジェクトとする。",
+      "求人応募を、応募と求人情報の両方に対する主従関係を持つ連結オブジェクトとして設定する。"
+    ],
+    "answer": "D",
+    "explanation": "2つの主従関係を持つカスタムオブジェクトは「連結オブジェクト（ジャンクションオブジェクト）」と呼ばれ、多対多の関係を実現します。",
+    "category": "データ管理"
+  },
+  {
+    "question": "ワークフロールールを保存前フローに置き換えた後、ケースが予期せぬ方法でルーティングされるようになりました。原因は何ですか？",
+    "options": [
+      "古いワークフロー ルールがまだアクティブである。",
+      "フローは割り当てルールの前にあり、ワークフロー ルールは割り当てルールの後にある。",
+      "割り当てルールが正しいフィールドを参照していない。",
+      "複数の自動化ツールが使用され、自動化が異なる順序で実行される。"
+    ],
+    "answer": "D",
+    "explanation": "保存前フロー、割り当てルール、その他の自動化ツールの実行順序が競合したり、上書きしたりすることで予期しない動作が発生する可能性があります。",
+    "category": "自動化プロセス"
+  },
+  {
+    "question": "コンサルタントを無効化した後も、フロー障害メールが届き続けています。配信を止めるにはどうすればよいですか？",
+    "options": [
+      "カスタムメタデータ型を作成し、LastModifiedByフィールドを更新する。",
+      "メールログからフローを特定し、手動で更新する。",
+      "自動化設定で「プロセスまたはフローのエラーメールの送信」を「Apex例外メールの受信者」に設定し、管理者のメールを登録する。",
+      "データローダでフローインタビューのLastModifiedByを変更する。"
+    ],
+    "answer": "C",
+    "explanation": "自動化設定を変更することで、個々のフローを修正することなく、エラーメールの送信先を組織全体で一括管理できます。",
+    "category": "自動化プロセス"
+  },
+  {
+    "question": "物件レポートのフィルター条件として使用すべき3つのフィールドはどれですか？(3つ選択）",
+    "options": [
+      "販売者の電話番号（電話フィールド）",
+      "物件の特徴（複数選択の選択リスト）",
+      "物件の面積（数値フィールド）",
+      "物件の価格（数式フィールド）",
+      "物件の郡（選択リストフィールド）"
+    ],
+    "answer": "A,C,E",
+    "explanation": "電話、数値、選択リストフィールドはフィルター条件として使用可能です。複数選択の選択リストや一部の数式フィールドは、フィルターに使用できない場合があります。",
+    "category": "レポート・ダッシュボード"
+  },
+  {
+    "question": "新規ケースの対応待ち時間を短縮し、優先順位を適切に付けるために使用すべき機能はどれですか？",
+    "options": [
+      "自動応答ルール",
+      "エスカレーションルール",
+      "割り当てルール",
+      "ワークフロールール"
+    ],
+    "answer": "C",
+    "explanation": "割り当てルールにより適切なエージェントに迅速にルーティングされます。",
+    "category": "サービス・サポート"
+  },
+  {
+    "question": "Properties（主）に関連する Open House（従）レコードのうち、ステータスが「保留中」のものの数を計算するには何を使用すべきですか？",
+    "options": [
+      "Lightning コンポーネント",
+      "数式フィールド",
+      "ロールアップサマリー",
+      "Visualforce ページ"
+    ],
+    "answer": "C",
+    "explanation": "ロールアップ集計項目は、主従関係において従レコードの数をカウントしたり合計したりするのに適しています。",
+    "category": "データ管理"
+  },
+  {
+    "question": "進行中の商談に含まれる「取引先の合計数（重複なし）」をレポートで表示するには何を使用しますか？",
+    "options": [
+      "取引先名でグループ化された概要レポートの行数",
+      "取引先を含む商談を選択するクロスフィルター",
+      "取引先と商談を表示するカスタムレポートタイプ",
+      "取引先名列の「ユニークカウントを表示」オプション"
+    ],
+    "answer": "D",
+    "explanation": "「ユニークカウントを表示」オプションを使用すると、重複を排除して特定項目のユニークな値の数をカウントできます。",
+    "category": "レポート・ダッシュボード"
+  },
+  {
+    "question": "レコードページの読み込みパフォーマンスを診断し、改善箇所を特定するために管理者がすべきことは？",
+    "options": [
+      "デバッグ ログを確認する。",
+      "Lightning アプリケーション ビルダーから 分析 をクリックする。",
+      "開発者コンソールでデバッグを行う。",
+      "Apex デバッガーを使用する。"
+    ],
+    "answer": "B",
+    "explanation": "Lightning アプリケーションビルダーの「分析」ボタンは、ページの読み込み時間を評価し、具体的な改善策を提案してくれます。",
+    "category": "データ管理"
+  },
+  {
+    "question": "多要素認証 (MFA) を実装する際に考慮すべき2つのオプションは？(2つ選択）",
+    "options": [
+      "認証アプリ",
+      "ユーザー名とパスワード",
+      "セキュリティトークン",
+      "暗号化キー"
+    ],
+    "answer": "A,B",
+    "explanation": "MFAには、ユーザー名/パスワードという従来の認証に加えて、認証アプリによる確認コードなどの追加要素が必要です。",
+    "category": "権限・セキュリティ"
+  },
+  {
+    "question": "レポートやダッシュボードを表示する際、適切なユーザーであることを確認（再認証）するために必要な設定は？",
+    "options": [
+      "ログイン時にセキュリティトークンを要求する。",
+      "認証プロバイダーを設定する。",
+      "表示・エクスポート時に常にMFAを要求する。",
+      "エクスポートや印刷時に「高保証セッション」を要求する。"
+    ],
+    "answer": "D",
+    "explanation": "高保証セッションを必須とすることで、機密データにアクセスする直前に再度多要素認証を求めることができます。",
+    "category": "権限・セキュリティ"
+  },
+  {
+    "question": "取引先レコードの特定の選択リスト項目が表示されなくなった原因を特定するツールは何ですか？",
+    "options": [
+      "フィールド監査履歴",
+      "セットアップ監査証跡",
+      "フィールド履歴の追跡",
+      "デバッグログ"
+    ],
+    "answer": "B",
+    "explanation": "セットアップ監査証跡は、管理者が行った設定変更（項目レベルセキュリティやページレイアウトの変更）を追跡します。",
+    "category": "環境管理・展開"
+  },
+  {
+    "question": "個人アカウントを有効にする前に考慮すべきことは？",
+    "options": [
+      "個人アカウントを無効にすることはできません。",
+      "データストレージが少なくなります。",
+      "ビジネスアカウントと同じ共有モデルに含めることはできません。",
+      "すべての標準アカウントニュースは変換可能です。"
+    ],
+    "answer": "A",
+    "explanation": "個人アカウントはいったん有効化すると、容易に無効化したり削除したりすることはできません。",
+    "category": "データ管理"
+  },
+  {
+    "question": "本番環境へのデプロイでエラーが発生したが、サンドボックスでは成功していました。本番で最近何が変更されたかを確認する場所はどこですか？",
+    "options": [
+      "Salesforce オプティマイザー",
+      "開発コンソール",
+      "フィールド履歴",
+      "セットアップ監査証跡"
+    ],
+    "answer": "D",
+    "explanation": "セットアップ監査証跡により、本番環境で行われた最新の設定変更を確認し、デプロイメントの競合原因を特定できます。",
+    "category": "環境管理・展開"
+  },
+  {
+    "question": "変更セットを使用したデプロイのベストプラクティスを3つ挙げてください。(3つ選択）",
+    "options": [
+      "メンテナンス スケジュールに合わせてデプロイを計画する。",
+      "名前の命名規則をパブリッシャーレイアウトに合わせる。",
+      "デプロイ後のテストは営業時間後のみにする。",
+      "依存するすべてのコンポーネントをデプロイする。",
+      "変更セットを10,000ファイル以内に制限する。"
+    ],
+    "answer": "A,D,E",
+    "explanation": "メンテナンス時間との調整、依存コンポーネントの網羅、およびファイル数制限（10,000）の遵守が推奨されます。",
+    "category": "環境管理・展開"
+  },
+  {
+    "question": "サンドボックスで主従関係を参照関係に変更するテストを完了しました。本番に実装する次のステップは何ですか？",
+    "options": [
+      "本番組織で直接変更を加えます。",
+      "非管理パッケージを作成します。",
+      "データローダで変更をエクスポートします。",
+      "コンポーネントを送信変更セットに追加し、デプロイします。"
+    ],
+    "answer": "D",
+    "explanation": "サンドボックスでのテスト結果を本番に安全に移行するには、変更セットを使用するのが標準的な手順です。",
+    "category": "環境管理・展開"
+  },
+  {
+    "question": "Account と Region をリンクする連結オブジェクトを作成した後、次に実行すべき2つの手順は？(2つ選択）",
+    "options": [
+      "連結オブジェクトに Region への主従関係を作成する。",
+      "Region から連結オブジェクトへの主従関係を構築する。",
+      "Account から連結オブジェクトへの主従関係を作成する。",
+      "連結オブジェクトに Account への主従関係を設定する。"
+    ],
+    "answer": "A,D",
+    "explanation": "多対多の関係を作るには、連結オブジェクト側に、リンクしたい各オブジェクトへの主従関係項目を合計2つ作成します。",
+    "category": "データ管理"
+  },
+  {
+    "question": "フローのスケジュールパスで、有効期限の1か月前に通知する設定にしています。有効期限を「昨日の日付」に急遽変更した場合、どうなりますか？",
+    "options": [
+      "フローエラーが発生する。",
+      "当初の有効期限の1か月前に送信される。",
+      "当月の最終日に送信される。",
+      "再開イベントが再計算され、即座に送信される。"
+    ],
+    "answer": "D",
+    "explanation": "日付フィールドが変更されるとスケジュールパスが再計算されます。変更後の日付がすでに基準を満たしている（過ぎている）場合、アクションは即座に実行されます。",
+    "category": "自動化プロセス"
+  },
+  {
+    "question": "B2C顧客の中には、大企業のB2B取引先にも関連付けたいケースがあります。どの2つの機能を使用すべきですか？(2つ選択）",
+    "options": [
+      "複数の取引先への連絡先",
+      "リード",
+      "個人アカウント",
+      "キャンペーンメンバー"
+    ],
+    "answer": "A,C",
+    "explanation": "個人アカウントで消費者情報を管理し、「複数の取引先への連絡先」機能で勤務先（B2B取引先）とも関連付けることができます。",
+    "category": "データ管理"
+  },
+  {
+    "question": "「ケースレコードを表示できる全ユーザーがリンクを作成できる」ようにカスタムオブジェクト（ケース結果）を構成するには、どの設定が推奨されますか？",
+    "options": [
+      "読み取り専用共有設定による参照関係",
+      "読み取り専用共有設定による主従関係",
+      "読み取り/書き込み共有設定による参照関係",
+      "読み取り/書き込み共有設定による主従関係"
+    ],
+    "answer": "C",
+    "explanation": "参照関係を使用し、共有設定を読み書き可能にすることで、親レコードにアクセスできるユーザーが子レコードの編集（リンク作成）も行えるようになります。",
+    "category": "データ管理"
+  },
+  {
+    "question": "ユーザーが取引先のマージを完了できない原因は何ですか？(読み書き権限と所有権はある）",
+    "options": [
+      "管理者のみがマージできる。",
+      "地域割り当てが間違っている。",
+      "一致ルールが設定されていない。",
+      "ユーザーに取引先の削除権限がない。"
+    ],
+    "answer": "D",
+    "explanation": "取引先のマージでは重複レコードを削除するため、対象オブジェクトに対する「削除」権限が必須です。",
+    "category": "権限・セキュリティ"
+  },
+  {
+    "question": "「10分間操作がない場合、データを閲覧できないようにする」ために推奨される設定は？",
+    "options": [
+      "ログイン IP 範囲を強制する。",
+      "セッションを最初に使用されたドメインにロックする。",
+      "高保証セッションを必須にする。",
+      "セッションタイムアウト時に強制的にログアウトする。"
+    ],
+    "answer": "D",
+    "explanation": "強制ログアウト設定により、非アクティブなセッションを遮断し、無人デバイス経由の不正アクセスを防ぎます。",
+    "category": "権限・セキュリティ"
+  },
+  {
+    "question": "重複した商談を削除できないユーザーのトラブルシューティングで、管理者がまずすべきことは？",
+    "options": [
+      "重複レポートを実行する。",
+      "商談オブジェクトのユーザープロファイルで削除権限を確認する。",
+      "完了（失注）としてマークするよう助言する。",
+      "プロファイルをシステム管理者に変更する。"
+    ],
+    "answer": "B",
+    "explanation": "レコードを削除できない場合、まずそのオブジェクトに対するプロファイルレベルの権限（削除）を確認するのが基本です。",
+    "category": "権限・セキュリティ"
+  },
+  {
+    "question": "特定のフィールドが更新された際、ケースオーナーにメール通知を送るために使用すべきツールは？",
+    "options": [
+      "メールからケースへ",
+      "送信メッセージ",
+      "保存前のフロー",
+      "保存後のフロー"
+    ],
+    "answer": "D",
+    "explanation": "レコードの変更に基づいてメール送信などの外部アクションを実行するには、保存後フロー（レコードトリガーフローのアフター保存）を使用します。",
+    "category": "自動化プロセス"
+  },
+  {
+    "question": "検証ルールがあるにもかかわらず、無効なデータでレコードが更新されてしまう原因は何ですか？",
+    "options": [
+      "更新レコードフロー要素によるもの。",
+      "ワークフローフィールド更新によるもの。",
+      "Apex beforeトリガーによるもの。",
+      "すべてのデータの変更権限を持っているため。"
+    ],
+    "answer": "B",
+    "explanation": "ワークフローの項目自動更新は、検証ルールをバイパス（後回しに）することがあるため、無効なデータが保存される原因となります。",
+    "category": "自動化プロセス"
+  },
+  {
+    "question": "取引先の現在のステータスをケースページに表示し、検証ルールでも使用したい場合、何を推奨すべきですか？",
+    "options": [
+      "クロスオブジェクト式を作成します。",
+      "選択リスト フィールドを使用します。",
+      "ロールアップサマリーを作成します。",
+      "取引先に参照フィールドを追加します。"
+    ],
+    "answer": "A",
+    "explanation": "クロスオブジェクト数式（クロスオブジェクト式）を使用すると、関連する親オブジェクト（取引先）の値を子オブジェクト（ケース）に表示でき、検証ルール内でも参照可能です。",
+    "category": "データ管理"
+  },
+  {
+    "question": "複数のレコードトリガーフローを設定した場合、実行順序について考慮すべき点は？",
+    "options": [
+      "最高の優先度を割り当てる。",
+      "実行時間が長いフローが最初。",
+      "実行時間が短いフローが最初。",
+      "実行順序は保証されません。"
+    ],
+    "answer": "D",
+    "explanation": "同じオブジェクト・トリガー種別に複数のフローがある場合、実行順序は保証されません。",
+    "category": "自動化プロセス"
+  },
+  {
+    "question": "Data Loader で新しいカスタムオブジェクトが表示されない場合、何を確認すべきですか？",
+    "options": [
+      "権限セット。",
+      "フィールドレベルセキュリティ。",
+      "共有を許可する設定。",
+      "オブジェクトが「デプロイ済み」としてマークされているか。"
+    ],
+    "answer": "D",
+    "explanation": "オブジェクトが「開発中」のままだと、データローダなどの外部ツールから参照できません。",
+    "category": "環境管理・展開"
+  },
+  {
+    "question": "特定の製品を購入した顧客に、自動的にサポート権利を付与するにはどうすればよいですか？",
+    "options": [
+      "権利テンプレートを追加する。",
+      "製品マイルストーンを追加する。",
+      "資産のマイルストーンを作成するフローを構成する。",
+      "購入時に資産に権利を付与するフローを作成する。"
+    ],
+    "answer": "D",
+    "explanation": "フローを使用して、アセット（資産）の作成時にエンタイトルメント（権利）を自動生成することで、サポート要件を自動化できます。",
+    "category": "サービス・サポート"
+  },
+  {
+    "question": "B2Cビジネスモデルで、個々の消費者が直接の販売・マーケティング対象となる場合に検討すべき事項は？",
+    "options": [
+      "複雑なビジネスモデル。",
+      "B2Bビジネスモデル。",
+      "個人アカウントの使用。",
+      "ケースに個別の連絡先を含める必要性。"
+    ],
+    "answer": "C",
+    "explanation": "個人アカウント（Person Accounts）は、個人消費者を管理するB2Cモデルに最適化されています。",
+    "category": "データ管理"
+  },
+  {
+    "question": "メール-to-ケースで指定したレコードタイプと異なるタイプが割り当てられる原因は何ですか？",
+    "options": [
+      "ケース所有者の権限。",
+      "自動ケース ユーザーの権限。",
+      "ケース割り当てルール。",
+      "検証ルール。"
+    ],
+    "answer": "B",
+    "explanation": "自動ケースユーザー（Automated Case User）が新しいレコードタイプに対する権限を持っていない場合、デフォルトのレコードタイプが割り当てられます。",
+    "category": "サービス・サポート"
+  },
+  {
+    "question": "「新規利益」フィールドを営業担当には表示し、コンサルタントには非表示にするために使用する機能は？(2つ選択）",
+    "options": [
+      "権限セット",
+      "レコードタイプ",
+      "組織全体のデフォルト",
+      "プロファイル"
+    ],
+    "answer": "B,D",
+    "explanation": "レコードタイプとプロファイルを使用して制御するとされています。※一般的には項目レベルセキュリティ（FLS）が関与しますが、選択肢に従います。",
+    "category": "権限・セキュリティ"
+  },
+  {
+    "question": "商談金額の「前年比変化」を計算するレポートを作成するために必要なツールは？",
+    "options": [
+      "行レベルの数式。",
+      "結合レポート。",
+      "PARENTGROUPVAL関数。",
+      "PREVGROUPVAL関数。"
+    ],
+    "answer": "D",
+    "explanation": "PREVGROUPVAL関数を使用すると、レポート内の前のグループ（この場合は前年）の値を取得して計算が可能です。",
+    "category": "レポート・ダッシュボード"
+  },
+  {
+    "question": "ERPの注文データをSalesforceにインポートする際、関係を維持するために管理者がロードする2つの方法は何ですか？(2つ選択）",
+    "options": [
+      "Upsert 操作を使用する。",
+      "挿入操作を使用する。",
+      "Salesforce レコード ID を外部 ID に置き換える。",
+      "外部 ID データ値をオブジェクトにマップする。"
+    ],
+    "answer": "B,D",
+    "explanation": "新規データのインポートには「挿入」を使用し、リレーションの維持には外部IDのマッピングを利用します。",
+    "category": "データ管理"
+  },
+  {
+    "question": "ユーザーが見積を商談と同期できない原因は何ですか？",
+    "options": [
+      "見積の検証ルール。",
+      "別の見積が承認を待っている。",
+      "別の見積がすでに同期されている。",
+      "有効期限切れ。"
+    ],
+    "answer": "B",
+    "explanation": "別の見積が承認待ちとなっています。※一般的にはC（同期は一度に1つ）も理由となりますが、正解記号に従います。",
+    "category": "営業・マーケティング"
+  },
+  {
+    "question": "事前承認済みの特別バンドルセールを、標準の承認プロセスを通さずに提供するにはどうすればよいですか？",
+    "options": [
+      "別の価格表を作成します。",
+      "CPQ を実装します。",
+      "承認プロセスを削除します。",
+      "サブスクリプションを有効にします。"
+    ],
+    "answer": "B",
+    "explanation": "CPQの実装が選択されています。※解説文では価格表についても触れられています。",
+    "category": "営業・マーケティング"
+  },
+  {
+    "question": "取引先に関連する財務情報を、財務チームのメンバーのみが閲覧できるようにするには、どのようなリレーションを作成すべきですか？",
+    "options": [
+      "参照関係",
+      "外部関係",
+      "階層関係",
+      "主従関係"
+    ],
+    "answer": "D",
+    "explanation": "主従関係を使用すると、子レコード（財務情報）の共有権限を親レコード（取引先）に依存させ、より厳密な制御が可能です。",
+    "category": "データ管理"
+  },
+  {
+    "question": "郵便番号の形式（ハイフンの有無など）を一貫させるために実装すべきものは？",
+    "options": [
+      "標準フィールドの長さを編集する。",
+      "クイック作成機能を追加する。",
+      "検証ルールで REGEX 関数を使用する。",
+      "ヘルプテキストを追加する。"
+    ],
+    "answer": "C",
+    "explanation": "REGEX（正規表現）関数を使用した検証ルールは、特定の文字パターンを強制するのに非常に有効です。",
+    "category": "データ管理"
+  },
+  {
+    "question": "レコードが削除された際、誰が削除したかを通知する自動化ソリューションはどれですか？",
+    "options": [
+      "Heroku",
+      "プロセスビルダー",
+      "ワークフローアクション",
+      "フロー"
+    ],
+    "answer": "D",
+    "explanation": "フローは「レコード削除時」をトリガーに実行でき、削除アクションの詳細をメール等で通知可能です。",
+    "category": "自動化プロセス"
+  },
+  {
+    "question": "身分証明書番号をユーザーが変更不可とし、最後の2桁以外をマスクするために必要な設定は？(2つ選択）",
+    "options": [
+      "クラシック暗号化",
+      "Shield Platform Encryption",
+      "フィールド暗号化ポリシー",
+      "プロファイルの読み取り専用設定"
+    ],
+    "answer": "B,C",
+    "explanation": "Shield Platform Encryption とフィールド暗号化ポリシーを組み合わせることで、高度なデータ保護とマスキングを実現できます。",
+    "category": "権限・セキュリティ"
+  },
+  {
+    "question": "英国進出にあたり、米国と同じ製品だが価格が異なる設定をスムーズに行うには何を構成すべきですか？",
+    "options": [
+      "UK用の商談レコードタイプ。",
+      "為替レート変換フロー。",
+      "新しい英国注文フォーム。",
+      "英国の製品価格設定用の新しい価格表。"
+    ],
+    "answer": "D",
+    "explanation": "価格表（プライスブック）を分けることで、同じ製品に対して地域や通貨ごとに異なる価格を設定できます。",
+    "category": "営業・マーケティング"
+  },
+  {
+    "question": "特定の商談クローズ時に「Apex CPU時間制限を超えました」エラーが発生する場合、原因特定に推奨される方法は？",
+    "options": [
+      "ログインフォレンジック。",
+      "ユーザーのデバッグ ログを有効にする。",
+      "セットアップ監査証跡。",
+      "Apex例外メールアラート。"
+    ],
+    "answer": "B",
+    "explanation": "デバッグログにより各プロセスの実行時間が可視化され、どの処理がCPU制限を圧迫しているか特定できます。",
+    "category": "環境管理・展開"
+  },
+  {
+    "question": "更新チームが、取引先を非公開にしたまま「成立したすべての商談」を閲覧できるようにするにはどうすればよいですか？",
+    "options": [
+      "商談のOWDを公開読み取り専用にし、商談チームに追加する。",
+      "取引先の「すべて表示」権限セットを割り当てる。",
+      "新しいプロファイルで「すべて表示」を有効にする。",
+      "公開グループを作成し、条件に基づく共有ルールを作成する。"
+    ],
+    "answer": "A",
+    "explanation": "商談のOWD（組織全体のデフォルト）設定の変更や共有ルールを適切に組み合わせることで、上位オブジェクトの機密性を保ちつつ下位オブジェクトへのアクセスを許可できます。",
+    "category": "権限・セキュリティ"
+  },
+  {
+    "question": "60日以上経過したリードの所有者を、既存の割り当てルールに基づいて一括更新するために使用する2つのツールは？(2つ選択）",
+    "options": [
+      "バルクAPI",
+      "一括更新",
+      "データローダー.io",
+      "インポートウィザード"
+    ],
+    "answer": "A,C",
+    "explanation": "Bulk API（バルクAPI）や Dataloader.io は、大量のレコード更新を効率的に行うことができます。",
+    "category": "データ管理"
+  },
+  {
+    "question": "モバイルアプリでステータス項目などが自動入力された状態で商談を迅速にクローズできるようにするには何を作成すべきですか？",
+    "options": [
+      "オブジェクト固有のクイックアクション",
+      "グローバルクイックアクション",
+      "Lightning コンポーネント",
+      "拡張関連リスト"
+    ],
+    "answer": "A",
+    "explanation": "オブジェクト固有のアクションでは、項目の定義済み値を設定できるため、ユーザーの入力を最小限に抑えられます。",
+    "category": "営業・マーケティング"
+  },
+  {
+    "question": "テリトリー別およびロール階層別の両方で予測数値を表示したい場合、推奨される3つのオプションは？(3つ選択）",
+    "options": [
+      "予測タイプを選択させる。",
+      "テリトリー予測を有効にする。",
+      "カスタムフィールドを作成する。",
+      "階層モデルに合わせてテリトリー予測を変更する。",
+      "ロール階層予測を有効にする。"
+    ],
+    "answer": "B,D,E",
+    "explanation": "テリトリー予測とロール階層予測の両方を有効化・調整することで、複雑な組織構造に対応した予測が可能になります。",
+    "category": "営業・マーケティング"
+  },
+  {
+    "question": "サービス/営業マネージャーが、既存の共有ルールに関係なく全取引先を参照できるようにするには？",
+    "options": [
+      "カスタム プロファイル。",
+      "OWDをパブリック読み取り専用にする。",
+      "「すべて表示」権限セットを割り当てる。",
+      "役割階層の上位に移動する。"
+    ],
+    "answer": "C",
+    "explanation": "権限セットによる「すべて表示」の付与は、既存の共有制限をバイパスしてアクセスを許可する最も柔軟な方法です。",
+    "category": "権限・セキュリティ"
+  },
+  {
+    "question": "ユーザーのプロファイルに応じて表示するデータを細かく制御（例：サポートプロファイルには特定フィールドのみ表示）するには何を使用しますか？",
+    "options": [
+      "2 つのレコード タイプと 2 つのページ レイアウト。",
+      "動的フォーム。",
+      "ミュート権限。",
+      "フィールド レベルのセキュリティ。"
+    ],
+    "answer": "B",
+    "explanation": "動的フォームを使用すると、ページレイアウトを分けずに、条件に応じてフィールドやセクションの表示/非表示を制御できます。※正解解説ではFLSについても言及されています。",
+    "category": "データ管理"
+  },
+  {
+    "question": "物件承認後に外部エンドポイントへメッセージを送信して価格を更新するのに最適な自動化ツールは？",
+    "options": [
+      "フロー",
+      "プラットフォームイベント",
+      "プロセスビルダー",
+      "メールアラート"
+    ],
+    "answer": "A",
+    "explanation": "フロー（Flow）はHTTPリクエストやApexアクションを通じて、外部のREST APIエンドポイントと通信する能力を持っています。",
+    "category": "自動化プロセス"
+  },
+  {
+    "question": "ロールアップサマリー計算を利用した自動化通知を設定する際、注意すべき点は？",
+    "options": [
+      "標準オブジェクトのみ使用可能。",
+      "標準オブジェクトからのみトリガー可能。",
+      "計算によりフローが停止する。",
+      "ロールアップ サマリー計算は、プロセスとワークフローの後に実行される。"
+    ],
+    "answer": "D",
+    "explanation": "ロールアップ集計の再計算タイミングは自動化プロセスより後のため、古い値が通知に含まれるリスクを考慮する必要があります。",
+    "category": "自動化プロセス"
+  },
+  {
+    "question": "取引先ページに、その取引先の成約額グラフを表示し、営業マネージャーのみに表示されるようにするには？",
+    "options": [
+      "取引先 ID でフィルター。",
+      "新しいレポートを割り当てる。",
+      "営業マネージャー ロールのコンポーネントの可視性をフィルターする。",
+      "新しいページ レイアウトを作成。"
+    ],
+    "answer": "C",
+    "explanation": "ライトニングコンポーネントの「可視性フィルター」を使用すると、ユーザー属性（ロール等）に基づいてコンポーネントの表示を制御できます。",
+    "category": "レポート・ダッシュボード"
+  },
+  {
+    "question": "Lightning レコード ページのパフォーマンスを確認できる 2 つの方法は？(2つ選択）",
+    "options": [
+      "Lightning 使用状況アプリ",
+      "分析ボタン",
+      "アクティベーションボタン",
+      "ページメニュー"
+    ],
+    "answer": "A,B",
+    "explanation": "Lightning 使用状況アプリと、アプリケーションビルダー内の「分析」ボタンが、パフォーマンス測定の主要ツールです。",
+    "category": "データ管理"
+  },
+  {
+    "question": "「複数の取引先への連絡先」を有効にしているが、主要取引先（プライマリ）を削除できない原因は？",
+    "options": [
+      "ページレイアウトに関係なく、連絡先にはプライマリ取引先リレーションが必要。",
+      "他と間接的な関係がある。",
+      "連絡先関係レコードを先に消す必要がある。",
+      "プライベート連絡先を有効にする必要がある。"
+    ],
+    "answer": "A",
+    "explanation": "連絡先レコードには必ず1つの直接（プライマリ）取引先リレーションシップが必要です。",
+    "category": "データ管理"
+  },
+  {
+    "question": "ワークフロー時間トリガーの処理制限エラーのメールが届いた際、確認すべき2つのプロセスは？(2つ選択）",
+    "options": [
+      "時間ベースのワークフロー",
+      "インタビューの一時停止",
+      "Apexトリガー",
+      "デバッグログ"
+    ],
+    "answer": "A,D",
+    "explanation": "大量の時間ベースアクションがキューに溜まっている場合、制限に達する可能性があります。",
+    "category": "自動化プロセス"
+  },
+  {
+    "question": "フルサンドボックス内の機密情報をテスターに公開しないようにするための推奨手段は？",
+    "options": [
+      "サンドボックスの更新。",
+      "権限セットの割り当て。",
+      "データ マスキング ツールを使用する。",
+      "情報を削除する。"
+    ],
+    "answer": "C",
+    "explanation": "データマスキング（Data Mask）を使用すると、現実的なテストデータを保ちつつ機密情報を架空データに置換できます。",
+    "category": "環境管理・展開"
+  },
+  {
+    "question": "「Room」に、関連する設備（Equipment）レコードの数をカウントするロールアップ集計項目を作成したい場合の手順は？",
+    "options": [
+      "設備レコード変更時に実行されるレコードトリガーフロー。",
+      "Roomレコード変更時のレコードトリガーフロー。",
+      "設備の集計フィールド。",
+      "Room にロールアップ サマリー フィールドを作成する。"
+    ],
+    "answer": "A",
+    "explanation": "※正解記号はAとなっていますが、解説文では「Roomにロールアップ集計項目を作成できる」と説明されており、手法としてのフローについても言及されています。",
+    "category": "データ管理"
+  },
+  {
+    "question": "特定の取引先でエンジニアの支援が必要な際、一時的にアクセスを許可しつつセキュリティを維持する機能は？",
+    "options": [
+      "権限セット",
+      "権限セットグループ",
+      "取引先チーム",
+      "カスタムプロファイル"
+    ],
+    "answer": "C",
+    "explanation": "取引先チームを使用すると、特定の取引先に対して共同作業者へアクセス権を付与できます。",
+    "category": "権限・セキュリティ"
+  },
+  {
+    "question": "Salesforce 内で機密情報が保存されている場所にフラグを立てて管理するための機能は？",
+    "options": [
+      "データ分類",
+      "スキーマビルダー",
+      "従来の暗号化",
+      "フィールドレベルのセキュリティ"
+    ],
+    "answer": "A",
+    "explanation": "データ分類（Data Classification）は、各項目に機密性や分類レベルを設定し、コンプライアンス管理に役立てる機能です。",
+    "category": "権限・セキュリティ"
+  },
+  {
+    "question": "本番環境での検証ルール追加により、開発チームのデプロイが失敗する事態を防ぐための対策は？",
+    "options": [
+      "セットアップ監査証跡の確認。",
+      "サンドボックスの毎日更新。",
+      "共有サンドボックスで変更をテストする。",
+      "画面フローの活用。"
+    ],
+    "answer": "C",
+    "explanation": "共有サンドボックスで事前にテストし、競合を解消してから本番に反映させるべきです。",
+    "category": "環境管理・展開"
+  },
+  {
+    "question": "同じロール、同じプロファイルのユーザーが2人いるが、取引先にアクセスできるのが1人だけである原因は？",
+    "options": [
+      "ワークフロールール",
+      "手動共有",
+      "キュー",
+      "ロール階層"
+    ],
+    "answer": "B",
+    "explanation": "手動共有（Manual Sharing）により、個別のレコードに対して特定のユーザーのみにアクセス権が追加されている可能性があります。",
+    "category": "権限・セキュリティ"
+  },
+  {
+    "question": "Shipment オブジェクトの3つの項目を、特定の順序で更新する自動化を構成するにはどうすればよいですか？",
+    "options": [
+      "3つのワークフロールールを順番に作成する。",
+      "1 つの基準ノードと 3 つのフィールド更新を正しい順序で含むプロセスを作成します。",
+      "各アクションの後に停止する3つの基準ノード。",
+      "3つの更新を順に入力した1つのワークフロールール。"
+    ],
+    "answer": "B",
+    "explanation": "プロセスビルダー（またはフロー）の単一ノード内でアクションを順序付けることで、確実な順次実行が保証されます。ワークフロールールでは実行順序の制御が困難です。",
+    "category": "自動化プロセス"
+  },
+  {
+    "question": "ダッシュボードを「取引先所有者」でフィルタリングした際、商談コンポーネントでレコードが欠落する問題を解決するには？",
+    "options": [
+      "クロスフィルターの追加。",
+      "カスタムレポートタイプの使用。",
+      "商談コンポーネントで、同等のフィールドを変更します。",
+      "結合レポートの作成。"
+    ],
+    "answer": "C",
+    "explanation": "ダッシュボードフィルタの項目（取引先所有者）が、商談側のどの項目（例：商談所有者）に対応するかを正しくマッピングする必要があります。",
+    "category": "レポート・ダッシュボード"
+  }
+];
+
+</script>
+    <script>
+// Ensure testData is loaded
+if (typeof testData === 'undefined') {
+    alert("Error: testData (questions) not loaded. Ensure questions.js is included.");
+}
+
+// Variables & State
+let currentQuestionIndex = 0;
+let userAnswers = {}; // { index: { selected: [], correct: bool } }
+let correctCount = 0;
+let answeredCount = 0;
+let isAnswered = false;
+let startTime = null;
+
+const questions = testData;
+const STORAGE_KEY = 'sf_admin2_quiz_progress_v2026q77';
+
+const DOM = {
+    app: document.getElementById('app'),
+    scoreDisplay: document.getElementById('score-display'),
+    progressDisplay: document.getElementById('progress-display'),
+    progressBar: document.getElementById('progress-bar'),
+    questionTitle: document.getElementById('question-title'),
+    questionText: document.getElementById('question-text'),
+    optionsContainer: document.getElementById('options-container'),
+    feedbackBox: document.getElementById('feedback-box'),
+    btnPrev: document.getElementById('btn-prev'),
+    btnSubmit: document.getElementById('btn-submit'),
+    btnNext: document.getElementById('btn-next'),
+    quizContainer: document.querySelector('.quiz-container')
+};
+
+function letterToIndex(letter) {
+    return letter.toUpperCase().charCodeAt(0) - 65;
+}
+
+function indexToLetter(index) {
+    return String.fromCharCode(65 + index);
+}
+
+function saveProgress() {
+    const data = {
+        currentQuestionIndex,
+        userAnswers,
+        correctCount,
+        answeredCount,
+        startTime: startTime || Date.now()
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function loadProgress() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+        const data = JSON.parse(saved);
+        currentQuestionIndex = data.currentQuestionIndex || 0;
+        userAnswers = data.userAnswers || {};
+        correctCount = data.correctCount || 0;
+        answeredCount = data.answeredCount || 0;
+        startTime = data.startTime || Date.now();
+        return true;
+    }
+    return false;
+}
+
+function initQuiz() {
+    const hasProgress = loadProgress();
+    if (!startTime) startTime = Date.now();
+    
+    if (hasProgress && answeredCount === questions.length) {
+        showResult();
+    } else {
+        loadQuestion(currentQuestionIndex);
+        updateStats();
+    }
+}
+
+function updateStats() {
+    DOM.scoreDisplay.textContent = `Score: ${correctCount} / ${answeredCount}`;
+    DOM.progressDisplay.textContent = `Question: ${currentQuestionIndex + 1} / ${questions.length}`;
+    const progress = ((currentQuestionIndex) / questions.length) * 100;
+    DOM.progressBar.style.width = `${progress}%`;
+}
+
+function loadQuestion(index) {
+    const q = questions[index];
+    const prevResult = userAnswers[index];
+    
+    // Check if multi-choice
+    const correctAnswers = q.answer.split(',').map(s => s.trim()).filter(Boolean);
+    const isMultiChoice = correctAnswers.length > 1;
+    
+    DOM.questionTitle.innerHTML = `Question ${index + 1} ${isMultiChoice ? '<span class="multi-choice-badge">複数選択</span>' : ''}`;
+    DOM.questionText.textContent = q.question;
+    DOM.optionsContainer.innerHTML = '';
+    DOM.feedbackBox.style.display = 'none';
+    
+    if (index === 0) DOM.btnPrev.disabled = true;
+    else DOM.btnPrev.disabled = false;
+
+    q.options.forEach((optText, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.dataset.index = i;
+        const labelStr = indexToLetter(i);
+        btn.innerHTML = `<span class="option-label">${labelStr}.</span> <span class="option-text">${optText}</span>`;
+        
+        if (prevResult) {
+            // Already answered
+            btn.classList.add('disabled');
+            const correctIndices = correctAnswers.map(l => letterToIndex(l));
+            if (correctIndices.includes(i)) btn.classList.add('correct');
+            if (prevResult.selected.includes(i) && !correctIndices.includes(i)) btn.classList.add('incorrect');
+            if (prevResult.selected.includes(i)) btn.classList.add('selected');
+        } else {
+            btn.addEventListener('click', () => handleOptionClick(btn, isMultiChoice));
+        }
+        DOM.optionsContainer.appendChild(btn);
+    });
+
+    if (prevResult) {
+        isAnswered = true;
+        showFeedback(prevResult.correct, q);
+        DOM.btnSubmit.style.display = 'none';
+        DOM.btnNext.style.display = 'inline-block';
+    } else {
+        isAnswered = false;
+        DOM.btnSubmit.style.display = 'inline-block';
+        DOM.btnNext.style.display = 'none';
+        DOM.btnSubmit.disabled = true;
+    }
+}
+
+function handleOptionClick(btn, isMultiChoice) {
+    if (isAnswered) return;
+    if (isMultiChoice) {
+        btn.classList.toggle('selected');
+    } else {
+        Array.from(DOM.optionsContainer.children).forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+    }
+    const anySelected = DOM.optionsContainer.querySelector('.selected');
+    DOM.btnSubmit.disabled = !anySelected;
+}
+
+function submitAnswer() {
+    if (isAnswered) return;
+    isAnswered = true;
+    
+    const q = questions[currentQuestionIndex];
+    const correctLetterArray = q.answer.split(',').map(s => s.trim().toUpperCase()).filter(Boolean);
+    const correctIndices = correctLetterArray.map(l => letterToIndex(l));
+    
+    const buttons = Array.from(DOM.optionsContainer.children);
+    const selectedIndices = buttons.filter(b => b.classList.contains('selected')).map(b => parseInt(b.dataset.index));
+    
+    const isCorrect = 
+        selectedIndices.length === correctIndices.length &&
+        selectedIndices.every(val => correctIndices.includes(val));
+    
+    // Save result
+    userAnswers[currentQuestionIndex] = {
+        selected: selectedIndices,
+        correct: isCorrect
+    };
+    
+    buttons.forEach(b => {
+        b.classList.add('disabled');
+        const i = parseInt(b.dataset.index);
+        if (correctIndices.includes(i)) b.classList.add('correct');
+        else if (selectedIndices.includes(i)) b.classList.add('incorrect');
+    });
+    
+    if (isCorrect) correctCount++;
+    answeredCount++;
+    
+    showFeedback(isCorrect, q);
+    updateStats();
+    saveProgress();
+    
+    DOM.btnSubmit.style.display = 'none';
+    DOM.btnNext.style.display = 'inline-block';
+}
+
+function showFeedback(isCorrect, q) {
+    DOM.feedbackBox.style.display = 'block';
+    DOM.feedbackBox.className = `feedback-box ${isCorrect ? 'feedback-correct' : 'feedback-incorrect'}`;
+    let content = `<strong>${isCorrect ? '正解！' : '不正解！'}</strong> <span style="font-size:0.8rem; opacity:0.8">カテゴリ: ${q.category || '一般'}</span><br>正答: ${q.answer}`;
+    if (q.explanation) content += `<br><br><strong>【解説】</strong><br>${q.explanation}`;
+    DOM.feedbackBox.innerHTML = content;
+}
+
+function nextQuestion() {
+    if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+        loadQuestion(currentQuestionIndex);
+        updateStats();
+        saveProgress();
+    } else {
+        showResult();
+    }
+}
+
+function prevQuestion() {
+    if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        loadQuestion(currentQuestionIndex);
+        updateStats();
+    }
+}
+
+function showResult() {
+    DOM.quizContainer.style.display = 'none';
+    const durationMin = Math.round((Date.now() - startTime) / 60000);
+    const scoreRate = Math.round((correctCount / questions.length) * 100);
+    const passThreshold = 65;
+    const isPass = scoreRate >= passThreshold;
+    
+    const catStats = {};
+    questions.forEach((q, i) => {
+        const cat = q.category || '一般';
+        if (!catStats[cat]) catStats[cat] = { total: 0, correct: 0 };
+        catStats[cat].total++;
+        if (userAnswers[i] && userAnswers[i].correct) catStats[cat].correct++;
+    });
+
+    const sortedCats = Object.keys(catStats).map(c => ({ name: c, rate: Math.round((catStats[c].correct / catStats[c].total) * 100) })).sort((a,b) => a.rate - b.rate);
+    const weakest = sortedCats.slice(0, 2);
+    const strongest = sortedCats.slice(-2).reverse();
+
+    let resultHtml = `
+    <div class="results-view">
+        <div class="result-card">
+            <div class="pass-fail-banner ${isPass ? 'pass-banner' : 'fail-banner'}">
+                ${isPass ? 'PASS - 合格圏内' : 'FAIL - 復習が必要です'}
+            </div>
+            <h2>試験結果レポート</h2>
+            <div class="stat-grid">
+                <div class="stat-item"><span class="stat-value">${correctCount} / ${questions.length}</span><span class="stat-label">正解数</span></div>
+                <div class="stat-item"><span class="stat-value">${scoreRate}%</span><span class="stat-label">正解率</span></div>
+                <div class="stat-item"><span class="stat-value">${durationMin}分</span><span class="stat-label">学習時間</span></div>
+            </div>
+            
+            <div class="priority-box">
+                <h4><span style="font-size:1.2rem">⚠️</span> 重点復習エリア</h4>
+                <p>以下のカテゴリの正解率が低くなっています。関連するヘルプドキュメントを確認してください：</p>
+                <ul>
+                    ${weakest.map(w => `<li><strong>${w.name}</strong> (${w.rate}%)</li>`).join('')}
+                </ul>
+            </div>
+        </div>
+
+        <div class="glass-panel">
+            <h3>カテゴリ別分析</h3>
+            <div class="category-stats">
+                <table>
+                    <thead><tr><th>カテゴリ</th><th>正解数</th><th>比率</th></tr></thead>
+                    <tbody>
+                        ${sortedCats.map(c => `<tr><td>${c.name}</td><td>${catStats[c.name].correct}/${catStats[c.name].total}</td><td>${c.rate}%</td></tr>`).join('')}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="glass-panel">
+            <h3>解答履歴一覧</h3>
+            <div class="history-scroll">
+                <table class="answer-history-table">
+                    <thead><tr><th>No</th><th>カテゴリ</th><th>結果</th><th>あなたの解答</th><th>正答</th></tr></thead>
+                    <tbody>
+                        ${questions.map((q, i) => {
+                            const ans = userAnswers[i];
+                            const selectedStr = ans ? ans.selected.map(idx => indexToLetter(idx)).join(',') : '-';
+                            return `<tr>
+                                <td><a href="#" class="history-link" onclick="goToQuestion(${i}); return false;">${i+1}</a></td>
+                                <td style="font-size:0.7rem">${q.category}</td>
+                                <td class="${ans && ans.correct ? 'icon-correct' : 'icon-incorrect'}">${ans && ans.correct ? '○' : '×'}</td>
+                                <td>${selectedStr}</td>
+                                <td>${q.answer}</td>
+                            </tr>`;
+                        }).join('')}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="glass-panel">
+            <h3>知識ポイントのまとめ</h3>
+            <div class="knowledge-summary">
+                ${questions.filter((q, i) => userAnswers[i] && !userAnswers[i].correct).map((q, i) => `
+                    <div class="knowledge-point">
+                        <span class="kp-title">Q${questions.indexOf(q) + 1}: ${q.question.substring(0, 80)}...</span>
+                        <div class="kp-content"><strong>正解: ${q.answer}</strong><br>${q.explanation}</div>
+                    </div>
+                `).join('') || '<p>間違えた問題はありません。完璧です！</p>'}
+            </div>
+        </div>
+
+        <div style="margin-bottom: 3rem; text-align: center;">
+            <button class="btn btn-primary btn-reset" onclick="resetQuiz()">回答をリセットして再挑戦</button>
+        </div>
+    </div>`;
+
+    let resDiv = document.createElement('div');
+    resDiv.id = 'results-screen';
+    resDiv.innerHTML = resultHtml;
+    DOM.app.appendChild(resDiv);
+}
+
+function goToQuestion(index) {
+    const resultsScreen = document.getElementById('results-screen');
+    if (resultsScreen) resultsScreen.remove();
+    DOM.quizContainer.style.display = '';
+    currentQuestionIndex = index;
+    loadQuestion(index);
+    updateStats();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function resetQuiz() {
+    if (confirm('回答履歴をリセットして最初からやり直しますか？')) {
+        localStorage.removeItem(STORAGE_KEY);
+        location.reload();
+    }
+}
+
+DOM.btnSubmit.addEventListener('click', submitAnswer);
+DOM.btnNext.addEventListener('click', nextQuestion);
+DOM.btnPrev.addEventListener('click', prevQuestion);
+
+const glossaryToggle = document.getElementById('glossary-toggle');
+const glossaryBody = document.getElementById('glossary-body');
+glossaryToggle.addEventListener('click', () => {
+    const isShow = glossaryBody.classList.toggle('show');
+    glossaryToggle.innerHTML = isShow ? '<span class="arrow">▲</span> 重要用語集を閉じる' : '<span class="arrow">▼</span> 重要用語集を表示';
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    if(questions && questions.length > 0) {
+        initQuiz();
+    } else {
+        DOM.questionTitle.textContent = "No questions found!";
+    }
+});
+    </script>
+</body>
+</html>
