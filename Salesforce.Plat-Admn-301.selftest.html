@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salesforce 認定上級アドミニストレーター 自己テスト</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>/* Base and Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
+    --success: #10b981;
+    --success-bg: rgba(16, 185, 129, 0.1);
+    --danger: #ef4444;
+    --danger-bg: rgba(239, 68, 68, 0.1);
+    --option-bg: rgba(255, 255, 255, 0.03);
+    --option-hover: rgba(255, 255, 255, 0.08);
+    --option-selected: rgba(59, 130, 246, 0.2);
+    --option-selected-border: #3b82f6;
+    --radius: 12px;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-gradient);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+    overflow-x: hidden;
+}
+
+#app {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+    transition: color 0.2s;
+}
+.back-link:hover { color: #60a5fa; }
+
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(to right, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.header-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    padding: 0 0.5rem;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+#progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    width: 0%;
+    transition: width 0.4s ease;
+}
+
+/* Main Content: Glass Panel */
+.glass-panel {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.question-header {
+    margin-bottom: 1.5rem;
+}
+
+#question-text {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    white-space: pre-line;
+}
+
+/* Options */
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.option-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background: var(--option-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    color: var(--text-main);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    gap: 1rem;
+}
+
+.option-btn:hover:not(.disabled) {
+    background: var(--option-hover);
+    transform: translateY(-2px);
+}
+
+.option-btn.selected {
+    background: var(--option-selected);
+    border-color: var(--option-selected-border);
+}
+
+.option-btn.correct {
+    background: var(--success-bg);
+    border-color: var(--success);
+}
+
+.option-btn.incorrect {
+    background: var(--danger-bg);
+    border-color: var(--danger);
+}
+
+.option-btn.disabled {
+    cursor: default;
+    opacity: 0.8;
+}
+
+.option-label {
+    font-weight: 600;
+    color: var(--text-muted);
+    min-width: 24px;
+}
+
+/* Feedback Box */
+.feedback-box {
+    padding: 1.25rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    font-weight: 500;
+    animation: slideDown 0.3s ease forwards;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.feedback-correct {
+    background: var(--success-bg);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.feedback-incorrect {
+    background: var(--danger-bg);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    outline: none;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.39);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.controls-extra {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--glass-border);
+}
+
+.btn-accent {
+    background: #8b5cf6;
+    color: white;
+    box-shadow: 0 4px 14px 0 rgba(139, 92, 246, 0.3);
+}
+
+.btn-accent:hover:not(:disabled) {
+    background: #7c3aed;
+    transform: translateY(-1px);
+}
+
+.btn-danger-outline {
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid var(--danger);
+}
+
+.btn-danger-outline:hover:not(:disabled) {
+    background: var(--danger-bg);
+}
+
+@media (max-width: 600px) {
+    .controls {
+        flex-direction: column;
+    }
+    .controls-extra {
+        flex-direction: row;
+    }
+    .btn {
+        width: 100%;
+    }
+}
+
+/* Glossary Section */
+.glossary-section {
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 800px;
+}
+
+.glossary-toggle {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text-muted);
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    transition: all 0.2s;
+    justify-content: center;
+}
+
+.glossary-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+}
+
+.glossary-body {
+    display: none;
+    margin-top: 1rem;
+    overflow-x: auto;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+}
+
+.glossary-body.show {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    min-width: 500px;
+}
+
+th {
+    background: rgba(255, 255, 255, 0.05);
+    color: #60a5fa;
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+    vertical-align: top;
+}
+
+td:first-child { width: 40px; color: var(--text-muted); }
+td:nth-child(2) { width: 180px; font-weight: 600; color: #60a5fa; }
+
+tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Results View Styling */
+.results-view {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    animation: fadeIn 0.6s ease;
+}
+
+.result-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    text-align: center;
+}
+
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.stat-item {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--glass-border);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+    display: block;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.category-stats table, .answer-list table {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.knowledge-summary {
+    text-align: left;
+    margin-top: 2rem;
+}
+
+.knowledge-point {
+    background: rgba(239, 68, 68, 0.05);
+    border-left: 4px solid var(--danger);
+    padding: 1.5rem;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 1.5rem;
+}
+
+.kp-title {
+    font-weight: 700;
+    color: #f87171;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.kp-content {
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge-success { background: var(--success); color: white; }
+.badge-danger { background: var(--danger); color: white; }
+
+.btn-reset {
+    margin-top: 2rem;
+    background: #475569;
+}
+
+/* New Analysis Components */
+.pass-fail-banner {
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.pass-banner {
+    background: var(--success);
+    color: white;
+}
+.fail-banner {
+    background: var(--danger);
+    color: white;
+}
+
+.priority-box {
+    background: rgba(251, 191, 36, 0.1);
+    border: 1px solid #fbbf24;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    text-align: left;
+}
+.priority-box h4 {
+    color: #fbbf24;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.answer-history-table {
+    font-size: 0.8rem !important;
+}
+
+.answer-history-table td {
+    padding: 0.5rem !important;
+}
+
+.icon-correct { color: var(--success); font-weight: bold; }
+.icon-incorrect { color: var(--danger); font-weight: bold; }
+
+.multi-choice-badge {
+    background: var(--danger);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+}
+
+.history-link {
+    color: #60a5fa;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 600;
+}
+.history-link:hover {
+    color: #93c5fd;
+}
+
+.history-scroll {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+</style>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <a href="index.html" class="back-link">← 問題集一覧に戻る</a>
+            <h1>Salesforce 認定上級アドミニストレーター 自己テスト</h1>
+            <div class="header-stats">
+                <span id="score-display">Score: 0 / 0</span>
+                <span id="progress-display">Question: 1 / 60</span>
+            </div>
+            <div class="progress-bar-container">
+                <div id="progress-bar"></div>
+            </div>
+        </header>
+
+        <section class="glossary-section">
+            <button class="glossary-toggle" id="glossary-toggle">
+                <span class="arrow">▼</span> 重要用語集を表示
+            </button>
+            <div class="glossary-body" id="glossary-body">
+                <table>
+                    <thead>
+                        <tr><th>#</th><th>用語</th><th>定義</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>クロス条件 (Cross Filter)</td><td>レポートで関連オブジェクトの有無に基づきレコードを絞り込む機能。「商談がない取引先」等の抽出に有効。</td></tr>
+                        <tr><td>2</td><td>動的ダッシュボード</td><td>ログインユーザーの権限に応じてデータを切り替えて表示するダッシュボード。</td></tr>
+                        <tr><td>3</td><td>共有ルール (Sharing Rules)</td><td>OWD（組織全体のデフォルト）設定を拡張し、特定条件や所有者に基づいてアクセス権を付与する。</td></tr>
+                        <tr><td>4</td><td>テリトリー管理</td><td>取引先属性に基づきユーザーのアクセス権を動的に制御する機能。ロール階層とは独立。</td></tr>
+                        <tr><td>5</td><td>主従関係 (Master-Detail)</td><td>親レコードが子レコードの動作を制御するリレーション。積み上げ集計項目が使用可能。</td></tr>
+                        <tr><td>6</td><td>変更セット (Change Sets)</td><td>Sandbox等から本番環境へメタデータを移行するツール。データは移行不可。</td></tr>
+                        <tr><td>7</td><td>エンタイトルメント</td><td>顧客へのサポートレベルを定義。ケースと関連付けてサポート期間を管理する。</td></tr>
+                        <tr><td>8</td><td>コラボレーション売上予測</td><td>売上予測分類に基づく将来の売上予測機能。マネージャによる金額調整が可能。</td></tr>
+                        <tr><td>9</td><td>代理管理</td><td>システム管理者以外のユーザーに一部の管理タスク（ユーザー作成等）を委任する機能。</td></tr>
+                        <tr><td>10</td><td>セッションベースの権限セット</td><td>特定のセッション条件下でのみ有効になる権限セット。場所や時間に応じたアクセス制御に使用。</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <main class="quiz-container">
+            <div id="quiz-card" class="glass-panel">
+                <div class="question-header">
+                    <h2 id="question-title">Loading...</h2>
+                </div>
+                
+                <div class="question-body">
+                    <p id="question-text"></p>
+                </div>
+                
+                <div class="options-container" id="options-container">
+                    <!-- Options injected here by JS -->
+                </div>
+                
+                <div class="feedback-box" id="feedback-box" style="display: none;">
+                    <!-- Feedback injected here -->
+                </div>
+                
+                <div class="controls">
+                    <button class="btn btn-secondary" id="btn-prev" disabled>Previous</button>
+                    <button class="btn btn-primary" id="btn-submit">Submit Answer</button>
+                    <button class="btn btn-primary" id="btn-next" style="display: none;">Next Question</button>
+                </div>
+                <div class="controls-extra">
+                    <button class="btn btn-danger-outline" id="btn-reset" onclick="resetQuiz()">Reset</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+const testData = [
+  {
+    "question": "営業マネージャは、成立した商談が昨年1件もない取引先のレポートがほしいと考えています。この要件はどのようにして満たせますか？",
+    "options": [
+      "取引先レポートタイプと商談レポートタイプを使用して結合レポートを作成する",
+      "取引先と商談のカスタムレポートタイプを作成し、「商談なし」フィルタを適用する",
+      "商談レポートタイプで取引先名をグループ化し、レコード件数がゼロのものを抽出する",
+      "取引先レポートタイプでクロス条件を使用する"
+    ],
+    "answer": "A",
+    "explanation": "結合レポートを使用すると、異なるレポートタイプのデータを1つのレポートに組み合わせることができます。取引先レポートタイプと商談レポートタイプを結合することで、商談がない取引先を特定できます。クロス条件は単一のレポートタイプ内でのフィルタリングに使用され、この要件には結合レポートが適切です。",
+    "category": "データと分析"
+  },
+  {
+    "question": "進行中の商談がない取引先を対象にしたキャンペーンを開始しようとしています。システム管理者はこれを手伝うためにどのレポートソリューションを設定できるでしょうか？",
+    "options": [
+      "カスタムレポートタイプを作成する",
+      "バケット項目を使用する",
+      "結合レポートを作成する",
+      "クロス条件"
+    ],
+    "answer": "D",
+    "explanation": "クロス条件（Cross Filter）を使用すると、関連オブジェクトのレコードの有無に基づいてレポートをフィルタリングできます。「商談のない取引先」という条件を設定することで、進行中の商談がない取引先を簡単に特定できます。これはレポートの標準機能であり、カスタムレポートタイプを作成する必要はありません。",
+    "category": "データと分析"
+  },
+  {
+    "question": "セールスマネージャは、セールス担当者の商談、取引先、および関連ケースをそれぞれダッシュボードに表示したいと考えています。適切な対応方法はどれですか？",
+    "options": [
+      "動的ダッシュボードを作成し、セールスマネージャが「私のチームのダッシュボードの参照」権限を必ず持つようにする",
+      "ダッシュボードの実行ユーザをセールスマネージャに設定する",
+      "セールスマネージャのプロファイルに「すべてのデータの参照」権限を付与する",
+      "各セールス担当者ごとに個別のダッシュボードを作成する"
+    ],
+    "answer": "A",
+    "explanation": "動的ダッシュボードを使用すると、各ユーザーが自分の権限に基づいたデータを表示できます。「私のチームのダッシュボードの参照」権限により、マネージャは自分のチームメンバーの視点でダッシュボードを確認できます。個別のダッシュボードを作成するよりも効率的で管理しやすいソリューションです。",
+    "category": "データと分析"
+  },
+  {
+    "question": "担当者は、申込がないすべての募集職種を示すレポートを実行したいと考えています。どのソリューションが要件を満たしますか？",
+    "options": [
+      "結合レポートを使用して募集職種と申込を表示する",
+      "クロス条件付きの標準の募集職種レポートタイプを使用する",
+      "募集職種と申込のカスタムレポートタイプを作成し、「申込あり」でフィルタする",
+      "申込オブジェクトにカスタム数式項目を作成してレポートに追加する"
+    ],
+    "answer": "B",
+    "explanation": "クロス条件を使用すると、関連レコードの有無でフィルタリングできます。標準の募集職種レポートタイプにクロス条件「申込なし」を追加することで、申込がない募集職種を簡単に表示できます。カスタムレポートタイプを作成する必要がなく、最もシンプルなソリューションです。",
+    "category": "データと分析"
+  },
+  {
+    "question": "4つの営業地域があります。各販売地域はセールス部門VPが統括しています。各VPは、担当地域のデータのみのコンポーネントで構成されるダッシュボードを毎週月曜日の朝にメールで受け取りたいと考えています。システム管理者がこの要件を満たすにはどうすればよいでしょうか？",
+    "options": [
+      "4つの異なるダッシュボードを作成し、それぞれにスケジュールを設定する",
+      "各地域を条件に設定したダッシュボードを1つ作成して、月曜日の朝に配信されるようにスケジュールを設定する",
+      "AppExchangeのダッシュボード配信ツールを使用する",
+      "各VPに動的ダッシュボードを作成して、手動でメール送信する"
+    ],
+    "answer": "B",
+    "explanation": "ダッシュボードの条件（フィルタ）機能を使用して、1つのダッシュボードで各地域のデータを表示できます。ダッシュボードのスケジュール配信機能を使って月曜日の朝に自動メール配信を設定できます。これにより、管理するダッシュボードの数を最小限に抑えつつ、各VPに必要なデータを配信できます。",
+    "category": "データと分析"
+  },
+  {
+    "question": "上位5件の顧客の商談と活動を表示する取引先管理ダッシュボードを作成するよう依頼されました。この要件を満たすために、管理者はどのダッシュボード機能を使用する必要がありますか？",
+    "options": [
+      "動的ダッシュボードを使用する",
+      "結合レポートをダッシュボードコンポーネントに設定する",
+      "ダッシュボードでマトリックスレポートを使用する",
+      "ダッシュボードフィルタを使用する"
+    ],
+    "answer": "C",
+    "explanation": "マトリックスレポートは行と列の両方でデータをグループ化でき、複数の指標（商談と活動）を同時に表示するのに適しています。上位5件の顧客ごとに商談と活動のデータをまとめて表示するには、マトリックスレポートをダッシュボードコンポーネントとして使用するのが最適です。",
+    "category": "データと分析"
+  },
+  {
+    "question": "毎月のサービスサブスクリプションを販売しており、商談レポートが毎月受け取る金額を正確に表していることを確認したいと考えています。この要件を満たすために、管理者はどのソリューションを使用する必要がありますか？",
+    "options": [
+      "各収益期間の製品収益スケジュールを使用する",
+      "カスタム数式項目で月額を計算する",
+      "商談の金額項目に月額を入力するワークフロールールを作成する",
+      "毎月の商談レコードを自動作成するフローを構築する"
+    ],
+    "answer": "A",
+    "explanation": "製品の収益スケジュールを使用すると、サブスクリプション収益を各期間に分割して管理できます。これにより、商談レポートで各月に受け取る金額が正確に反映されます。収益スケジュールはSalesforceの標準機能であり、繰り返し収益の管理に最適なソリューションです。",
+    "category": "データと分析"
+  },
+  {
+    "question": "ユニバーサルコンテナ社は、取引先に非公開の共有モデルを使用しています。ユーザーAはユーザーBのチームに配属され、同じプロファイルとロールを付与されています。それぞれのユーザーは、20件のアカウントを所有していますが、ユーザーBは40件のアカウントを表示できます。一方、ユーザーAは、20件のアカウントしか表示できません。考えられる理由は何ですか？（2つ選択）",
+    "options": [
+      "ユーザーBは、それらのレコードに対する手動共有が設定されている",
+      "ユーザーBのプロファイルに追加のオブジェクト権限がある",
+      "ユーザーBは、それらのレコードにアクセス可能な共有ルールのメンバーになっている",
+      "ユーザーBは「すべてのデータの参照」権限を持っている",
+      "ユーザーBのロール階層がユーザーAより上位にある"
+    ],
+    "answer": "A,C",
+    "explanation": "同じプロファイルとロールを持つユーザーで表示できるレコード数が異なる場合、共有ルールまたは手動共有による追加アクセスが考えられます。共有ルールは特定の条件やグループメンバーシップに基づいてアクセスを付与し、手動共有はレコード所有者や管理者が個別にアクセスを付与する機能です。プロファイルとロールが同じであるため、それらに起因する差異ではありません。",
+    "category": "セキュリティとアクセス権"
+  },
+  {
+    "question": "ミュート権限セットで削除権限を選択したとき、自動的にミュートされるほかの権限はどれですか？",
+    "options": [
+      "すべてのデータの参照",
+      "レコードの作成",
+      "すべてのデータの編集",
+      "レコードの更新"
+    ],
+    "answer": "C",
+    "explanation": "ミュート権限セットで削除権限をミュートすると、「すべてのデータの編集」権限も自動的にミュートされます。「すべてのデータの編集」には削除権限が含まれているため、削除をミュートする場合は「すべてのデータの編集」もミュートする必要があります。これはSalesforceの権限の依存関係に基づく動作です。",
+    "category": "セキュリティとアクセス権"
+  },
+  {
+    "question": "従業員が自身のレコードにのみアクセスできるようにする必要があります。管理者は、このオブジェクトに対する組織の共有設定を非公開にしましたが、従業員のマネージャーはメンバーのレコードにアクセスができます。マネージャによるアクセスをできなくするために、追加となる作業はどれですか？",
+    "options": [
+      "マネージャのロールをロール階層から削除する",
+      "条件ベースの共有ルールを作成してアクセスを制限する",
+      "マネージャのプロファイルからオブジェクトの参照権限を削除する",
+      "共有設定の階層を使用したアクセス許可のチェックを外す"
+    ],
+    "answer": "D",
+    "explanation": "Salesforceでは、デフォルトでロール階層の上位ユーザーは下位ユーザーが所有するレコードにアクセスできます。「階層を使用したアクセス許可」のチェックを外すと、ロール階層によるアクセスの自動付与が無効になります。これにより、マネージャでも部下のレコードに自動的にアクセスできなくなり、各従業員が自身のレコードにのみアクセスできるようになります。",
+    "category": "セキュリティとアクセス権"
+  },
+  {
+    "question": "テリトリーマネージャおよびセールス担当者はロール階層の同じロールレベルに位置します。取引先および商談オブジェクトは非公開に設定されています。テリトリーマネージャはテリトリーに割り当てられた取引先および商談に対してどのレコードアクセス権が許可されますか？（3つ選択）",
+    "options": [
+      "取引先の所有者に関係なく、テリトリーに割り当てられた取引先を参照、編集、移行、および削除できる",
+      "商談の所有者に関係なく、テリトリー内で取引先に関連付けられたすべての商談を移行できる",
+      "テリトリー内の取引先責任者を自動的に所有できる",
+      "テリトリー外の取引先に関連付けられた商談も参照できる",
+      "テリトリーに割り当てられていない取引先の商談を編集できる",
+      "商談の所有者に関係なく、テリトリー内で取引先に関連付けられたすべての商談を編集できる"
+    ],
+    "answer": "A,B,F",
+    "explanation": "エンタープライズテリトリー管理では、テリトリーに割り当てられたユーザーは、そのテリトリー内の取引先とそれに関連する商談に対してフルアクセス権（参照、編集、移行、削除）を持ちます。これはレコードの所有者やロール階層に関係なく適用されます。テリトリー外のレコードやテリトリーに割り当てられていない取引先にはこのアクセスは適用されません。",
+    "category": "セキュリティとアクセス権"
+  },
+  {
+    "question": "営業マネージャがある取引先責任者を表示できず「アクセス権がありません」というエラーが表示されます。取引先責任者の所有者は、ロール階層において営業マネージャの下位に存在しています。なぜですか？",
+    "options": [
+      "営業マネージャのプロファイルに取引先責任者の参照権限がない",
+      "取引先責任者の共有設定が非公開のため、アクセスが取引先責任者の所有者とシステム管理者のみに制限されている",
+      "取引先責任者レコードに項目レベルセキュリティが設定されている",
+      "取引先責任者の親取引先が別のロール階層に属している"
+    ],
+    "answer": "B",
+    "explanation": "取引先責任者の組織の共有設定（OWD）が「非公開」に設定されている場合、アクセスは取引先責任者の所有者とシステム管理者に制限されます。取引先責任者は通常「親レコードに連動」の共有設定が使用されますが、非公開に設定された場合はロール階層によるアクセスも制限され、下位の所有者のレコードであっても上位のマネージャがアクセスできない場合があります。",
+    "category": "セキュリティとアクセス権"
+  },
+  {
+    "question": "ユーザは、条件に基づく共有ルールを通して、商品サポートケースに対する「参照・更新」アクセス権を与えられています。ユーザのプロファイルはケースの「参照」権限のみを所有しています。ユーザの商品サポートケースに対する編集権限について正しいのはどれですか？",
+    "options": [
+      "ユーザは共有ルールによるアクセスを明示的に承認する必要がある",
+      "ユーザは商品サポートケースを編集できる",
+      "ユーザは自分が所有する商品サポートケースのみ編集できる",
+      "ユーザは商品サポートケースを編集できない。プロファイルの権限が共有ルールより優先される"
+    ],
+    "answer": "B",
+    "explanation": "Salesforceの共有モデルでは、共有ルールはプロファイルのオブジェクト権限とは独立して機能します。共有ルールによって「参照・更新」アクセスが付与されている場合、ユーザーはそのレコードを編集できます。プロファイルのオブジェクト権限は基本的なCRUD権限を定義しますが、共有ルールによるレコードレベルのアクセスはそれに追加される形で機能します。ただし、プロファイルでオブジェクトへの「参照」権限があることが前提条件です。",
+    "category": "セキュリティとアクセス権"
+  },
+  {
+    "question": "あるレコードタイプを使用したレコードへのアクセスを5人のユーザに制限する必要がありますが、この5人はそれぞれプロファイルが異なります。この要件を満たすにはどうすればよいですか？",
+    "options": [
+      "5人のユーザのロールを同じに変更する",
+      "各ユーザのプロファイルにレコードタイプのアクセス権を追加する",
+      "5人のユーザの公開グループを作成し、基準に基づく共有ルールを使用してこのレコードタイプを使用したケースを公開グループと共有する",
+      "5人のユーザに同じ権限セットを割り当てる"
+    ],
+    "answer": "C",
+    "explanation": "5人のユーザーが異なるプロファイルを持っている場合、公開グループを作成してそのグループに5人を追加し、基準ベースの共有ルールでレコードタイプに基づいてアクセスを付与するのが最適です。基準ベースの共有ルールでは、レコードタイプなどの項目値を条件として使用できるため、特定のレコードタイプのレコードのみを対象グループと共有できます。",
+    "category": "セキュリティとアクセス権"
+  },
+  {
+    "question": "VIPショールーム専用のアプリケーションがあります。このアプリケーションへのアクセスを許可するために使用すべき機能はどれですか？",
+    "options": [
+      "カスタムプロファイル",
+      "通常の権限セット",
+      "ロール階層",
+      "セッションベースの権限セット"
+    ],
+    "answer": "D",
+    "explanation": "セッションベースの権限セットは、特定のセッション条件が満たされた場合にのみアクティブになる権限セットです。VIPショールームのような物理的な場所に限定されたアプリケーションへのアクセスを制御するのに最適です。セッションベースの権限セットは、認証フローと組み合わせて、特定の条件（場所、時間帯など）が満たされた場合にのみ権限を付与できます。",
+    "category": "セキュリティとアクセス権"
+  },
+  {
+    "question": "テリトリー管理が有効になっています。テリトリーの一部のユーザは、取引先に関連付けられている取引先責任者と商談にアクセスする必要があります。テリトリーのユーザが使用可能な機能はどれですか？（2つ選択）",
+    "options": [
+      "所有権の自動移行",
+      "参照のみ",
+      "フルアクセス（参照・編集・削除・移行）",
+      "参照と編集"
+    ],
+    "answer": "B,D",
+    "explanation": "テリトリー管理では、テリトリーに割り当てられたユーザーに対して「参照のみ」または「参照と編集」のアクセスレベルを設定できます。これらのアクセスレベルは、テリトリーに割り当てられた取引先およびその関連レコード（取引先責任者、商談）に適用されます。",
+    "category": "セキュリティとアクセス権"
+  },
+  {
+    "question": "データローダを使用して取引先レコードの所有権を移行すると、どのような結果になりますか？（2つ選択）",
+    "options": [
+      "関連する商談の所有権も自動的に移行される",
+      "取引先チームのメンバーが自動的に更新される",
+      "レコードの活動履歴が新しい所有者に移行される",
+      "すべての手動共有が、移行されたレコードから削除される",
+      "レコードの所有権をベースにするすべての共有ルールが再適用される"
+    ],
+    "answer": "D,E",
+    "explanation": "データローダを使用してレコードの所有権を移行すると、所有者ベースの共有ルールが再評価・再適用されます。また、手動共有はレコードの所有権が変更されると自動的に削除されます。これはSalesforceの標準的な動作であり、レコードのセキュリティを維持するために重要です。",
+    "category": "セキュリティとアクセス権"
+  },
+  {
+    "question": "商談が\"交渉/レビュー\"または\"成立\"のフェーズで、各レコードに「金額」が入力されており、「クローズ準備完了」がチェックされているようにしたいと考えています。管理者はどの入力規則のエラー条件数式を構成する必要がありますか？",
+    "options": [
+      "IF(ISPICKVAL(StageName, \"Negotiation/Review\"), ISBLANK(Amount), Ready_to_close__c = FALSE)",
+      "AND(ISPICKVAL(StageName, \"Negotiation/Review\"), ISPICKVAL(StageName, \"Closed Won\"), ISBLANK(Amount), NOT(Ready_to_close__c))",
+      "OR(AND(ISPICKVAL(StageName, \"Negotiation/Review\"), ISPICKVAL(StageName, \"Closed Won\")), ISBLANK(Amount), Ready_to_close__c = FALSE)",
+      "AND(OR(ISPICKVAL(StageName, \"Negotiation/Review\"), ISPICKVAL(StageName, \"Closed Won\")), OR(ISBLANK(Amount), Ready_to_close__c = FALSE))"
+    ],
+    "answer": "D",
+    "explanation": "この入力規則は2つの条件を組み合わせています。まず、OR関数でフェーズが「交渉/レビュー」または「成立」であるかをチェックします。次に、OR関数で金額が空白またはクローズ準備完了がFALSEであるかをチェックします。AND関数でこれらを結合することで、対象フェーズで金額またはクローズ準備完了に不備がある場合にエラーが表示されます。",
+    "category": "プロセス自動化とロジック"
+  },
+  {
+    "question": "セールス担当の経営幹部は、商談名に取引先名が常に表示されるプロセスの実現を要望しています。この要件を満たすには自動化はどのように使用できますか？",
+    "options": [
+      "商談の入力規則で取引先名が含まれていることを検証する",
+      "プロセスビルダーで商談名を取引先名に置き換える",
+      "商談名に取引先名を自動入力する数式項目を作成する",
+      "取引先名が後ろにつながるように商談名を更新する、条件に基づくワークフロールールを作成する"
+    ],
+    "answer": "D",
+    "explanation": "ワークフロールールの項目自動更新アクションを使用して、商談名に取引先名を自動的に追加できます。条件を設定して、商談が作成または更新されたときに商談名フィールドを更新し、取引先名が含まれるようにします。数式項目は読み取り専用のため、ユーザーが商談名を編集できなくなるため適切ではありません。",
+    "category": "プロセス自動化とロジック"
+  },
+  {
+    "question": "代理承認者を許可する新しい承認プロセスが作成されました。プライマリの承認者がメール通知を受信しましたが、代理承認者は受信していないことが判明しました。管理者がトラブルシューティングするために実行する必要がある手順はどれですか？（2つ選択）",
+    "options": [
+      "組織のメール配信設定を確認する",
+      "代理承認者を許可するように各承認ステップが設定されていることを確認する",
+      "代理承認者のプロファイルを確認する",
+      "承認プロセスのメールテンプレートを変更する",
+      "代理承認者のユーザー設定を確認する"
+    ],
+    "answer": "B,E",
+    "explanation": "代理承認者が通知を受信しない場合、2つの点を確認する必要があります。まず、承認プロセスの各ステップで代理承認者が有効になっているかを確認します。次に、代理承認者として指定されたユーザーの個人設定で、代理承認者が正しく設定されているかを確認します。ユーザーの個人設定で「代理承認者」項目が設定されていない場合、通知は送信されません。",
+    "category": "プロセス自動化とロジック"
+  },
+  {
+    "question": "商談フェーズが変更されたときに、「次のステップ」項目が必ず更新されるようにしたいと考えています。このプロセスを自動化するにはどうすればよいでしょうか？",
+    "options": [
+      "ワークフロールールで次のステップをクリアする",
+      "フローを使用して次のステップ項目を自動更新する",
+      "プロセスビルダーで商談フェーズ変更時に通知を送信する",
+      "次の数式を使用した入力規則を作成する：AND( ISCHANGED(StageName), NOT( ISCHANGED(NextStep)))"
+    ],
+    "answer": "D",
+    "explanation": "この入力規則は、ISCHANGED関数を使用してフェーズ（StageName）が変更されたかどうかを確認し、同時にNextStep項目が変更されていない場合にエラーを表示します。AND関数でフェーズの変更と次のステップの未変更を組み合わせることで、フェーズ変更時に次のステップの更新を強制できます。",
+    "category": "プロセス自動化とロジック"
+  },
+  {
+    "question": "見込み客または顧客の2つの状況値で取引先を分類しています。システム管理者は、商談が成立したときに見込み客を顧客に自動的に変更したいと考えています。システム管理者はこれを遂行するためにどう対応すればよいでしょうか？（2つ選択）",
+    "options": [
+      "取引先のトリガーで商談のフェーズを監視する",
+      "取引先状況項目を更新する商談ワークフロールールを作成する",
+      "商談の入力規則で取引先状況を検証する",
+      "プロセスビルダーを使用して取引先状況項目を更新する"
+    ],
+    "answer": "B,D",
+    "explanation": "商談の成立時に取引先の状況を自動更新するには、ワークフロールールまたはプロセスビルダーを使用できます。ワークフロールールでは、商談フェーズが「成立」に変更されたときにクロスオブジェクトの項目自動更新で取引先の状況項目を更新します。プロセスビルダーでも同様に、商談レコードの変更をトリガーとして取引先の項目を更新できます。",
+    "category": "プロセス自動化とロジック"
+  },
+  {
+    "question": "リード状況が「進行中」から別の値に変わるまでにどのくらい時間がかかるかの報告できるようにしたいと考えています。営業チームからは、状況値の変更に必要なクリック数を減らしてほしいと依頼されました。システム管理者はこの要件を満たすために何をする必要ありますか？",
+    "options": [
+      "リード状況変更を追跡するカスタムオブジェクトを作成する",
+      "リードプロセスを作成し、各状況にタイムスタンプ項目を追加する",
+      "フローを使用してリード状況の変更日時を記録する",
+      "リード状況項目の項目履歴管理を有効にして、その項目に基づいてレポートを作成する"
+    ],
+    "answer": "D",
+    "explanation": "項目履歴管理を有効にすると、項目値の変更履歴が自動的に記録され、変更日時も追跡されます。これにより、リード状況が「進行中」から変更されるまでの時間をレポートで確認できます。追加のカスタマイズやクリック数の増加なしに要件を満たせる最もシンプルなソリューションです。",
+    "category": "プロセス自動化とロジック"
+  },
+  {
+    "question": "ローン申請者が承認されたか代替商品を案内されたかを示す情報に不備のあることに気が付きました。この情報は、営業サイクルの途中で選択リストを使用して収集されます。商談を完了する前にこの項目が必ず入力されているようにするにはどうすればよいですか？",
+    "options": [
+      "ワークフロールールで項目を自動入力する",
+      "ページレイアウトで項目を必須にする",
+      "フローで項目の入力を強制する",
+      "入力規則を作成する"
+    ],
+    "answer": "D",
+    "explanation": "入力規則を使用すると、特定の条件（商談の完了フェーズなど）で項目が入力されていない場合にエラーを表示できます。ページレイアウトで必須にすると常に必須になりますが、入力規則を使用すると「商談を完了する前」という条件付きの必須化が可能です。これにより、営業サイクルの途中では必須ではなく、完了時にのみ入力を強制できます。",
+    "category": "プロセス自動化とロジック"
+  },
+  {
+    "question": "記事マネージャが必ず、指定された値をカスタム記事項目に使用するには、システム管理者は何を行えばいいですか？",
+    "options": [
+      "記事のワークフロールールを作成する",
+      "記事のApexトリガーを作成する",
+      "記事の入力規則を作成する",
+      "記事のページレイアウトで項目を必須にする"
+    ],
+    "answer": "C",
+    "explanation": "Salesforce Knowledgeの記事に対して入力規則を作成することで、記事マネージャがカスタム項目に指定された値のみを使用するよう強制できます。入力規則は特定の値やパターンを検証し、条件に合わない場合はレコードの保存を防止します。",
+    "category": "プロセス自動化とロジック"
+  },
+  {
+    "question": "求人情報カスタムオブジェクトに関連する申込カスタムオブジェクトを作成したいと考えています。また、各求人情報への申込数を計算するためのノーコードソリューションも必要です。この機能を有効にするには、申込オブジェクトにどのタイプのフィールドを作成する必要がありますか？",
+    "options": [
+      "階層関係",
+      "外部参照関係",
+      "主従関係",
+      "参照関係"
+    ],
+    "answer": "C",
+    "explanation": "主従関係（Master-Detail Relationship）を使用すると、親オブジェクト（求人情報）に積み上げ集計項目を作成できます。積み上げ集計項目のCOUNT関数を使用して、各求人情報に関連する申込数を自動的に計算できます。これはノーコードソリューションであり、参照関係では積み上げ集計項目を使用できません。",
+    "category": "オブジェクトの設計とデータモデリング"
+  },
+  {
+    "question": "取引先に関連するフィードバック (Feedback__c) カスタムオブジェクトを作成し、すべてのフィードバックレコードが取引先所有者と同じユーザーによって所有されてるようにしたいと考えています。フィードバックオブジェクトと取引先をどのように関連付ける必要がありますか？",
+    "options": [
+      "主従関係項目をフィードバックに作成する",
+      "外部参照関係項目をフィードバックに作成する",
+      "参照関係項目をフィードバックに作成する",
+      "参照関係項目を取引先に作成する"
+    ],
+    "answer": "A",
+    "explanation": "主従関係では、子レコード（フィードバック）の所有者は自動的に親レコード（取引先）の所有者と同じになります。これにより、すべてのフィードバックレコードが取引先所有者と同じユーザーによって所有されるという要件を満たせます。参照関係では、子レコードに独自の所有者を設定できるため、この要件には適していません。",
+    "category": "オブジェクトの設計とデータモデリング"
+  },
+  {
+    "question": "募集職種レコードが削除された場合でも、応募者レコードは維持されるようにするためには、管理者はどのようなソリューションを推奨すべきですか？",
+    "options": [
+      "間接参照関係を使用する",
+      "応募者(Applicant__c) オブジェクトに参照関係項目を作成する",
+      "主従関係項目を応募者オブジェクトに作成する",
+      "募集職種オブジェクトに参照関係項目を作成する"
+    ],
+    "answer": "B",
+    "explanation": "参照関係（Lookup Relationship）では、親レコードが削除されても子レコードは独立して存在し続けます。主従関係では親レコードが削除されると子レコードも連鎖的に削除されます。募集職種が削除されても応募者レコードを維持する必要があるため、応募者オブジェクトに募集職種への参照関係項目を作成するのが適切です。",
+    "category": "オブジェクトの設計とデータモデリング"
+  },
+  {
+    "question": "調整回数を追跡する積み上げ集計項目を必要としています。システム管理者はどのような方法でこの目的を達成すべきですか？",
+    "options": [
+      "参照関係項目を作成し、フローで集計する",
+      "カスタム数式項目を作成する",
+      "調整に主従関係項目を作成する",
+      "Apexトリガーで集計ロジックを実装する"
+    ],
+    "answer": "C",
+    "explanation": "積み上げ集計項目は主従関係でのみ使用できます。調整オブジェクトに主従関係項目を作成することで、親オブジェクトに積み上げ集計項目を追加し、COUNT関数で調整回数を自動的に追跡できます。参照関係では積み上げ集計項目を直接使用できないため、主従関係が必要です。",
+    "category": "オブジェクトの設計とデータモデリング"
+  },
+  {
+    "question": "サポートエージェントはケースとバグを関連付けて、ケースに関連しているバグを追跡できるようにします。バグを作成するためにはケースが必要です。オブジェクトリレーションのうち、この要件を満たすものはどれですか？",
+    "options": [
+      "多対多リレーション",
+      "参照関係",
+      "自己参照関係",
+      "主従関係"
+    ],
+    "answer": "D",
+    "explanation": "主従関係は、子レコード（バグ）が親レコード（ケース）に依存している場合に適しています。「バグを作成するためにはケースが必要」という要件は、バグがケースなしでは存在できないことを意味し、これは主従関係の特性と一致します。主従関係では、子レコードの作成時に必ず親レコードを指定する必要があります。",
+    "category": "オブジェクトの設計とデータモデリング"
+  },
+  {
+    "question": "サポートマネージャが、同じようなスキルやヘルプ記事を要した他のケースを見つけ出す手段を求めています。この場合に役立つオブジェクトリレーションはどれですか？",
+    "options": [
+      "主従関係",
+      "外部参照関係",
+      "間接関係（自己参照など）",
+      "参照関係"
+    ],
+    "answer": "C",
+    "explanation": "間接関係や自己参照関係を使用すると、同じオブジェクト内のレコード同士を関連付けることができます。ケースオブジェクトに自己参照の参照関係項目を作成することで、類似のスキルやヘルプ記事を必要とした他のケースを関連付け、サポートマネージャがパターンを特定しやすくなります。",
+    "category": "オブジェクトの設計とデータモデリング"
+  },
+  {
+    "question": "マーケティングマネージャは、取引先に関連付けられた取引先責任者の数を表示する項目を各取引先に追加するように依頼しました。",
+    "options": [
+      "取引先と取引先責任者の間に主従関係を作成し、積み上げ集計項目を使用する",
+      "取引先にカスタム項目を作成する。Apexトリガを使用して、取引先責任者が追加または削除されたときに項目を更新する",
+      "取引先にカスタム数式項目を作成して取引先責任者をカウントする",
+      "レポートで取引先責任者数を集計する"
+    ],
+    "answer": "B",
+    "explanation": "取引先と取引先責任者は標準オブジェクト間の関係であり、主従関係に変更することはできません。そのため積み上げ集計項目は使用できません。Apexトリガを使用して、取引先責任者が追加または削除されたときにカスタム項目を更新するのが適切なソリューションです。数式項目では関連レコードのカウントを直接計算することはできません。",
+    "category": "オブジェクトの設計とデータモデリング"
+  },
+  {
+    "question": "変更セットを使用して複数の環境間で移行できるのはどの種類のメタデータですか？（2つ選択）",
+    "options": [
+      "メールテンプレート",
+      "レポートのスケジュール設定",
+      "カスタム項目",
+      "ユーザーレコード"
+    ],
+    "answer": "A,C",
+    "explanation": "変更セットは、カスタム項目やメールテンプレートなどのメタデータコンポーネントを環境間で移行するために使用されます。ユーザーレコードはデータであり、メタデータではないため変更セットに含めることはできません。レポートのスケジュール設定も変更セットではサポートされていません。",
+    "category": "変更管理とリリース"
+  },
+  {
+    "question": "Developer Edition組織から他の組織にメタデータをリリースするにはどのリリースツールを使用できますか？（2つ選択）",
+    "options": [
+      "Visual Studio Code 向け Salesforce 拡張機能",
+      "Ant移行ツール",
+      "変更セット",
+      "データローダ"
+    ],
+    "answer": "A,B",
+    "explanation": "Developer Edition組織は変更セットをサポートしていません。変更セットは本番環境とSandbox間でのみ使用可能です。Visual Studio Code向けSalesforce拡張機能（旧Force.com IDE）とAnt移行ツール（Force.com Migration Tool）は、どの組織タイプからでもメタデータのリリースに使用できるAPI ベースのツールです。",
+    "category": "変更管理とリリース"
+  },
+  {
+    "question": "最初の変更セットを作成した後、一部のコンポーネントが欠落していることに気付きました。管理者が変更セットに関して行う必要がある考慮事項は何ですか？（3つ選択）",
+    "options": [
+      "連動コンポーネントは自動的に含まれるため手動追加は不要",
+      "アップロード済みの変更セットを直接編集してコンポーネントを追加する",
+      "すべての連動コンポーネントをリリースする",
+      "変更セットでデータレコードも一緒に移行する",
+      "新しい変更セットを使用して、メタデータとデータを Sandboxから本番環境にリリースする",
+      "変更セットのコピーを作成して、アップロードされた変更セットに連動コンポーネントを追加する"
+    ],
+    "answer": "C,E,F",
+    "explanation": "アップロード済みの変更セットは直接編集できないため、コピーを作成して追加コンポーネントを含める必要があります。変更セットではメタデータとデータの両方をリリースできますが、すべての連動コンポーネント（依存関係のあるコンポーネント）を含めることが重要です。連動コンポーネントが欠落するとリリースが失敗する可能性があります。",
+    "category": "変更管理とリリース"
+  },
+  {
+    "question": "Sandbox内で取引先オブジェクトに新しい項目と、ページレイアウトに新しいセクションを作成し変更セットをアップロードしましたが、ページレイアウトを追加するのを忘れました。ページレイアウトをリリースするために取ることができるオプションはどれですか？（2つ選択）",
+    "options": [
+      "本番環境でページレイアウトを手動で再作成する",
+      "既存の変更セットをリリースし、ページレイアウトを含む新しい変更セットを作成してリリースする",
+      "Sandbox内の既存の変更セットにページレイアウトを追加し、変更セットを再度アップロードする",
+      "アップロード済みの変更セットにページレイアウトを追加する"
+    ],
+    "answer": "B,C",
+    "explanation": "アップロード済みの変更セットは直接編集できません。2つの方法があります：(1) Sandbox内の元の（アップロード前の）変更セットにページレイアウトを追加して再度アップロードする方法、(2) 既存の変更セットをそのままリリースし、ページレイアウトのみを含む新しい変更セットを別途作成してリリースする方法です。",
+    "category": "変更管理とリリース"
+  },
+  {
+    "question": "変更セットを使用して承認プロセスを移行するときにシステム管理者は何を考慮すべきですか？",
+    "options": [
+      "承認プロセスは変更セットで移行できない",
+      "変更セットには、ソース組織の有効承認プロセスの順序は含まれない",
+      "承認プロセスの関連ユーザーも自動的に移行される",
+      "承認プロセスのメールテンプレートは別途移行する必要はない"
+    ],
+    "answer": "B",
+    "explanation": "変更セットで承認プロセスを移行する場合、承認プロセスの定義自体は移行されますが、ソース組織での有効な承認プロセスの順序（優先順位）は含まれません。リリース先の組織で承認プロセスの順序を手動で設定する必要があります。また、関連するメールテンプレートやユーザーの設定も確認が必要です。",
+    "category": "変更管理とリリース"
+  },
+  {
+    "question": "Developer Sandbox で新しい承認プロセスを作成してテストしました。承認ルートは正しいものの、承認者は通知メールを受信していませんでした。この問題の原因は何ですか？",
+    "options": [
+      "Sandbox 内のユーザーのメールアドレスが無効になっている",
+      "承認者のプロファイルにメール受信権限がない",
+      "組織全体のメール配信が無効になっている",
+      "承認プロセスのメールテンプレートが設定されていない"
+    ],
+    "answer": "A",
+    "explanation": "Sandboxを作成すると、ユーザーのメールアドレスは自動的に無効化されます（通常、.invalidが付加されます）。これはSandboxからのテストメールが本番のユーザーに誤って送信されるのを防ぐための仕組みです。Sandbox内でメール通知をテストするには、ユーザーのメールアドレスを有効なアドレスに変更し、メール配信設定を確認する必要があります。",
+    "category": "監査・トラブルシューティング"
+  },
+  {
+    "question": "あるユーザーが他のユーザーとしてログインし、承認なしに取引先オブジェクトを編集していると疑っています。管理者は、他のユーザーとして誰がログインしているかを確認するためにどの設定を行いますか？",
+    "options": [
+      "設定の監査証跡を確認する",
+      "ユーザーのログイン履歴",
+      "Apex例外メールを確認する",
+      "デバッグログを有効にする"
+    ],
+    "answer": "B",
+    "explanation": "ユーザーのログイン履歴には、「代理ログイン元ユーザー」の情報が記録されます。管理者が別のユーザーとしてログインした場合、この情報がログイン履歴に表示されるため、誰が誰としてログインしたかを追跡できます。設定の監査証跡は設定変更の追跡に使用され、ログインの追跡には適していません。",
+    "category": "監査・トラブルシューティング"
+  },
+  {
+    "question": "ユーザーから、特定の取引先レコードを保存しようとすると、Apexトリガーエラーが発生するという報告を受けています。管理者は、そのレコードの処理に関する詳細情報をどのように収集できますか？",
+    "options": [
+      "レコードの項目履歴を確認する",
+      "ユーザーに対するデバッグログを有効にする",
+      "ユーザーのログイン履歴を確認する",
+      "設定の監査証跡を確認する"
+    ],
+    "answer": "B",
+    "explanation": "デバッグログを有効にすると、特定のユーザーの操作に関する詳細な実行ログを収集できます。Apexトリガーの実行、SOQL クエリ、DML操作など、レコード処理の各ステップが記録されるため、エラーの原因を特定するのに役立ちます。設定 > デバッグログで対象ユーザーを追加してログ収集を開始します。",
+    "category": "監査・トラブルシューティング"
+  },
+  {
+    "question": "コラボレーション売上予測を使用する際、セールス担当者が売上予測タブからアクセスできる情報にはどのようなものがありますか？（2つ選択）",
+    "options": [
+      "他のチームメンバーの売上予測の詳細",
+      "売上予測分類ごとの売上予測金額",
+      "過去の四半期の売上実績との比較",
+      "各売上予測金額を構成する商談"
+    ],
+    "answer": "B,D",
+    "explanation": "コラボレーション売上予測の売上予測タブでは、セールス担当者は売上予測分類（パイプライン、最善達成予測、達成予測、成立など）ごとの金額を確認できます。また、各分類の金額をドリルダウンして、それを構成する個々の商談を表示できます。他のチームメンバーの詳細はマネージャのみがアクセスできます。",
+    "category": "セールス・サービスアプリケーション"
+  },
+  {
+    "question": "四半期の売上予測を確認していたマネージャが、チームに入ったばかりのメンバーが売上予測に含まれていないことに気が付きました。このトラブルシューティングでシステム管理者が最初にすべきことは何ですか？",
+    "options": [
+      "ユーザの一般情報の下にある[売上予測を許可]をオンにする",
+      "ユーザのロール階層を確認する",
+      "ユーザのプロファイルに売上予測タブへのアクセスを追加する",
+      "売上予測の階層設定を更新する"
+    ],
+    "answer": "A",
+    "explanation": "ユーザーが売上予測に表示されない最も一般的な原因は、ユーザーレコードの「売上予測を許可」チェックボックスが無効になっていることです。新しいチームメンバーの場合、この設定が有効になっていない可能性が高いため、最初にこの設定を確認するのが適切です。",
+    "category": "セールス・サービスアプリケーション"
+  },
+  {
+    "question": "商品を商談に追加しているユーザが、お客様に適した価格を表示する価格表を選択しようとしていますが、価格表を選択するオプションが表示されません。システム管理者が実行すべきことは何ですか？",
+    "options": [
+      "ユーザのプロファイルに商品オブジェクトへのアクセスを追加する",
+      "商談レイアウトの[商品]関連リストに[価格表を選択]ボタンを追加する",
+      "価格表をアクティブにする",
+      "ユーザのプロファイルに価格表の参照権限を追加する"
+    ],
+    "answer": "B",
+    "explanation": "商談の商品関連リストに「価格表を選択」ボタンが表示されない場合、ページレイアウトの商品関連リストにこのボタンが追加されていない可能性があります。商談のページレイアウトを編集し、商品関連リストのプロパティで「価格表を選択」ボタンを追加する必要があります。",
+    "category": "セールス・サービスアプリケーション"
+  },
+  {
+    "question": "新年度の準備の一環として価格表を更新しています。オプションから削除できない価格表が1つあります。この問題の原因と考えられる設定はどれですか？（2つ選択）",
+    "options": [
+      "価格表がアクティブなキャンペーンに関連付けられている",
+      "価格表に関連する商談がある",
+      "価格表に待機中のワークフローアクションがある",
+      "価格表が承認プロセスに関連付けられている",
+      "価格表が標準価格表である"
+    ],
+    "answer": "C,D",
+    "explanation": "価格表が削除できない場合、待機中のワークフローアクションまたは承認プロセスに関連付けられている可能性があります。これらの自動化プロセスが価格表を参照している間は、データの整合性を保つために削除が制限されます。ワークフローアクションの完了または承認プロセスの関連付け解除が必要です。",
+    "category": "セールス・サービスアプリケーション"
+  },
+  {
+    "question": "Cloud Kicks (CK) には、「今月のスニーカー」という商品があり、$1,000 の年間サブスクリプションとして販売しています。この情報を正確にキャプチャするために、設定すべき商品スケジュールの種類はどれですか？",
+    "options": [
+      "デフォルトスケジュールは不要",
+      "数量スケジュールのみ",
+      "数量スケジュールと収益スケジュールの両方",
+      "収益スケジュールのみ"
+    ],
+    "answer": "D",
+    "explanation": "年間サブスクリプションの収益を各月に分割して認識する必要がある場合、収益スケジュールを使用します。収益スケジュールにより、$1,000の年間サブスクリプション収益を12ヶ月にわたって分割できます。数量スケジュールは製品の出荷タイミングを管理するために使用され、この場合は不要です。",
+    "category": "セールス・サービスアプリケーション"
+  },
+  {
+    "question": "コミュニティの訪問者がコミュニティにログインせずにサポートケースを送信できるようにしたいと考えています。このリクエストを実装するために必要な2つの機能はどれですか？",
+    "options": [
+      "ケースのエスカレーションルール",
+      "ケースの割り当てルール",
+      "Web-to-ケース",
+      "メール-to-ケース"
+    ],
+    "answer": "B,C",
+    "explanation": "Web-to-ケースを使用すると、ログインなしでWebフォームからケースを送信できます。ケースの割り当てルールを組み合わせることで、送信されたケースが適切なキューやエージェントに自動的に割り当てられます。メール-to-ケースはメールベースのケース作成であり、コミュニティのフォームからの送信とは異なります。",
+    "category": "セールス・サービスアプリケーション"
+  },
+  {
+    "question": "カスタマーコミュニティに Experience Cloud を使用しており、基本的な質問に答え、さらなるサポートが必要な場合にはトピックと対応可能状況に応じてお客様を適切なエージェントに転送するチャットボットをサイトに導入したいと考えています。設定すべき機能はどれですか？（2つ選択）",
+    "options": [
+      "メール-to-ケース",
+      "ケースの割り当てルール",
+      "スキルベースのルーティング",
+      "オムニチャネル"
+    ],
+    "answer": "C,D",
+    "explanation": "オムニチャネルはエージェントの対応可能状況を管理し、チャットを含む複数のチャネルからの問い合わせを適切にルーティングします。スキルベースのルーティングにより、トピック（スキル）に応じて最適なエージェントに転送できます。この2つの機能を組み合わせることで、チャットボットからの転送を対応可能なスキルを持つエージェントに効率的にルーティングできます。",
+    "category": "セールス・サービスアプリケーション"
+  },
+  {
+    "question": "Salesforce コンソールのチャットとはどのような機能ですか？（3つ選択）",
+    "options": [
+      "チャット中にケースを自動作成できる",
+      "チャットの応答をAIが自動生成する",
+      "チャットは別のエージェントに転送できる",
+      "チャット履歴はリアルタイムでレポートに反映される",
+      "ナレッジ記事の検索に記事ツールを使用できる",
+      "詳細タブで訪問者に関する情報を参照できる"
+    ],
+    "answer": "C,E,F",
+    "explanation": "Salesforceコンソールのチャット（Live Agent）では、エージェントは記事ツールを使用してナレッジ記事を検索し、顧客に情報を提供できます。詳細タブでは訪問者のブラウザ情報やIPアドレスなどを確認できます。また、チャットを別のエージェントやスキルグループに転送することも可能です。",
+    "category": "セールス・サービスアプリケーション"
+  },
+  {
+    "question": "顧客から連絡があったときにサービスレベル契約を手作業で検索しています。このプロセスを自動化するにはシステム管理者はどうすればよいでしょうか？",
+    "options": [
+      "カスタムオブジェクトでSLAを管理する",
+      "エンタイトルメントを有効化し、エンタイトルメントおよびサービス契約のタブを追加する",
+      "ケースの割り当てルールを設定する",
+      "ケースのワークフロールールを作成する"
+    ],
+    "answer": "B",
+    "explanation": "エンタイトルメントは、Salesforceのサービスレベル契約（SLA）管理機能です。エンタイトルメントを有効化することで、顧客のサポート契約を自動的に管理し、ケース作成時にエンタイトルメントが自動的に適用されます。エンタイトルメントタブとサービス契約タブを追加することで、エージェントはSLA情報に簡単にアクセスできます。",
+    "category": "セールス・サービスアプリケーション"
+  },
+  {
+    "question": "マイルストン、エンタイトルメントプロセス、およびエンタイトルメントテンプレートを含むエンタイトルメントの管理を設定するには、どの権限が有効化される必要がありますか？（2つ選択）",
+    "options": [
+      "アプリケーションのカスタマイズ",
+      "すべてのデータの参照",
+      "すべてのデータの編集",
+      "エンタイトルメントの管理"
+    ],
+    "answer": "A,D",
+    "explanation": "エンタイトルメントの完全な管理（マイルストン、エンタイトルメントプロセス、テンプレートの設定）には、「エンタイトルメントの管理」権限と「アプリケーションのカスタマイズ」権限の両方が必要です。「エンタイトルメントの管理」はエンタイトルメント固有の設定を許可し、「アプリケーションのカスタマイズ」はプロセスやテンプレートの作成・変更に必要です。",
+    "category": "セールス・サービスアプリケーション"
+  },
+  {
+    "question": "リードの作成から変換までのすべての存続期間に関する情報をレポートで表示し、リード状況に値が設定されないことを防止するにはどのようにして満たすことが推奨されますか？",
+    "options": [
+      "リード変換プロセスにカスタム項目を追加し、状況を必須にする",
+      "リードオブジェクトにカスタム日付項目を追加して各状況の開始日を手動入力する",
+      "フローを使用してリード状況の変更を記録し、プロセスビルダーで必須化する",
+      "リード状況項目を追跡するために、リード履歴レポートを使用し、状況期間を計算するためにカスタムのレポート項目を使用する。また、値の入力をスキップできない入力規則を作成する。"
+    ],
+    "answer": "D",
+    "explanation": "リード履歴レポートを使用すると、リード状況の変更履歴を時系列で追跡できます。カスタムレポート項目（数式列）を使用して各状況の期間を計算できます。さらに、入力規則でリード状況が空白にならないよう防止することで、データの完全性を確保できます。この組み合わせにより、リードの存続期間を正確にレポートできます。",
+    "category": "データ管理・コンテンツ管理"
+  },
+  {
+    "question": "アーカイブ済みの活動に関して伝えるべき考慮事項はどれですか？（2つ選択）",
+    "options": [
+      "365日以上前に終了した活動はアーカイブされる",
+      "アーカイブされた活動は完全に削除される",
+      "アーカイブされた活動はレポートに表示される",
+      "365日以上前に作成され、期日がないクローズされたToDoはアーカイブされる",
+      "アーカイブされた活動は90日後に自動削除される"
+    ],
+    "answer": "A,D",
+    "explanation": "Salesforceでは、365日（1年）以上前に終了した活動は自動的にアーカイブされます。また、365日以上前に作成され、期日が設定されていないクローズ済みのToDoもアーカイブ対象です。アーカイブされた活動は削除されるわけではなく、関連リストの「すべての活動を表示」から参照できますが、標準レポートには表示されません。",
+    "category": "データ管理・コンテンツ管理"
+  },
+  {
+    "question": "システム管理者が、システム内に同じ名前を持つ2つの取引先レコードが存在すると指摘しています。同じ名前の取引先責任者レコードが各取引先に関連付けられています。これらの取引先をマージする手順はどれが正しいですか？",
+    "options": [
+      "取引先のみマージすれば取引先責任者は自動的にマージされる",
+      "取引先責任者を先にマージしてから、取引先をマージする",
+      "取引先と取引先責任者を同時にマージする",
+      "重複する取引先をマージした後に、重複する取引先責任者をマージする"
+    ],
+    "answer": "D",
+    "explanation": "Salesforceでレコードをマージする際は、まず親レコード（取引先）をマージしてから、子レコード（取引先責任者）をマージする必要があります。取引先をマージすると、両方の取引先に関連する取引先責任者が1つの取引先に統合されますが、重複する取引先責任者自体は自動マージされないため、別途マージ操作が必要です。",
+    "category": "データ管理・コンテンツ管理"
+  },
+  {
+    "question": "Lightning の取引先レコードページの潜在的な重複コンポーネントには重複候補が1つも表示されていません。コンポーネントの出力を向上させるために、カスタマイズすべきものはどれですか？",
+    "options": [
+      "重複ルール",
+      "入力規則",
+      "一致ルール",
+      "重複ジョブ"
+    ],
+    "answer": "D",
+    "explanation": "潜在的な重複コンポーネントは、重複ジョブの結果を使用して重複候補を表示します。重複ジョブは既存レコード間の重複を検出するバックグラウンドプロセスです。重複候補が表示されない場合、重複ジョブが実行されていないか、設定が適切でない可能性があります。重複ジョブを実行・設定することで、コンポーネントに重複候補が表示されるようになります。",
+    "category": "データ管理・コンテンツ管理"
+  },
+  {
+    "question": "システム管理者が見積を設定するときに考慮すべき点はどれですか？（2つ選択）",
+    "options": [
+      "商談の見積を作成する前に、商談の価格表が有効になっている必要がある",
+      "見積 PDFのテキストは、ページに右揃えではなく、左揃えになる",
+      "見積は複数の価格表から商品を含めることができる",
+      "見積は商談なしで独立して作成できる"
+    ],
+    "answer": "A,B",
+    "explanation": "見積を作成するには、関連する商談に有効な価格表が設定されている必要があります。また、見積PDFを生成する際、テキストは左揃えで表示されます（右揃えはサポートされていません）。見積は商談に関連付けられ、商談の価格表から商品情報を引き継ぎます。",
+    "category": "データ管理・コンテンツ管理"
+  },
+  {
+    "question": "Salesforce CRM Content を設定するときにシステム管理者は何を考慮すべきですか？（2つ選択）",
+    "options": [
+      "入力規則を使用して、すべての寄稿コンテンツの説明を必須にできる",
+      "コンテンツはフォルダでのみ管理できる",
+      "コンテンツのバージョン管理は手動で行う必要がある",
+      "コンテンツのレコードタイプによって、コンテンツの詳細ページレイアウトに表示する項目が決まる"
+    ],
+    "answer": "A,D",
+    "explanation": "Salesforce CRM Contentでは、レコードタイプによってコンテンツの詳細ページレイアウトに表示される項目が決まります。また、入力規則を使用して、コンテンツの説明項目などを必須にすることができます。CRM Contentはライブラリベースの管理であり、バージョン管理は自動的に行われます。",
+    "category": "データ管理・コンテンツ管理"
+  },
+  {
+    "question": "ライブラリ内に寄稿可能なコンテンツについては、レコードタイプによる制限ができるようにすることを依頼されています。どう対応すればよいでしょうか？（2つ選択）",
+    "options": [
+      "指定するレコードタイプを、[選択済みのレコードタイプ]に追加する",
+      "権限セットでレコードタイプのアクセスを制御する",
+      "[ライブラリで使用できるレコードタイプを制限]のチェックボックスを有効にする",
+      "ライブラリのプロファイル設定でレコードタイプを制限する"
+    ],
+    "answer": "A,C",
+    "explanation": "ライブラリ内のコンテンツをレコードタイプで制限するには、まず「ライブラリで使用できるレコードタイプを制限」チェックボックスを有効にします。次に、許可するレコードタイプを「選択済みのレコードタイプ」リストに追加します。これにより、そのライブラリに寄稿できるコンテンツのタイプが指定したレコードタイプに制限されます。",
+    "category": "データ管理・コンテンツ管理"
+  },
+  {
+    "question": "カテゴリグループ内のナレッジのデータカテゴリをいくつか変更し、階層内のポジションを変更した後、管理者が[保存]をクリックしたときに発生するアクションはどれですか？（3つ選択）",
+    "options": [
+      "既存の記事のカテゴリ割り当てが自動的に更新される",
+      "記事の使用履歴がゼロにリセットされる",
+      "ユーザに表示される記事が変更される",
+      "カテゴリー選択リストの値が変更される",
+      "関連するケースの分類が自動的に変更される",
+      "記事のバージョン番号がリセットされる"
+    ],
+    "answer": "B,C,D",
+    "explanation": "データカテゴリの階層を変更して保存すると、3つの影響があります：(1) 記事の使用履歴（投票数や閲覧数）がゼロにリセットされます、(2) カテゴリの選択リスト値が新しい階層構造に合わせて変更されます、(3) カテゴリベースの表示設定により、ユーザーに表示される記事が変更される可能性があります。",
+    "category": "データ管理・コンテンツ管理"
+  },
+  {
+    "question": "Position カスタムオブジェクトの給与範囲と給与等の選択リストエントリを更新する必要があります。頻繁に発生するため、これらの選択リスト値を更新する機能を要求しています。これを許可するために、管理者はどの機能を考慮するべきですか？",
+    "options": [
+      "Positionオブジェクトの代理管理権限",
+      "権限セットで選択リスト編集権限を付与する",
+      "変更セットで選択リスト値を管理する",
+      "カスタムプロファイルを作成する"
+    ],
+    "answer": "A",
+    "explanation": "代理管理（Delegated Administration）を使用すると、システム管理者以外のユーザーにカスタムオブジェクトの特定の管理タスクを委任できます。Positionオブジェクトの代理管理権限を付与することで、指定されたユーザーが選択リスト値の追加・変更など、オブジェクトの管理タスクを実行できるようになります。",
+    "category": "データ管理・コンテンツ管理"
+  },
+  {
+    "question": "代理管理者を許可するようにシステム管理者が対応する中で、代理管理者機能では、どれがサポートされていますか？（3つ選択）",
+    "options": [
+      "ユーザの作成と編集",
+      "プロファイルの作成と編集",
+      "ワークフロールールの作成",
+      "組織の共有設定の変更",
+      "非コミュニティユーザのロック解除",
+      "カスタムオブジェクトの管理"
+    ],
+    "answer": "A,E,F",
+    "explanation": "代理管理者機能では、以下の3つの操作がサポートされています：(1) 非コミュニティユーザーのロック解除（ログイン失敗によるロックアウトの解除）、(2) カスタムオブジェクトの管理（項目や選択リスト値の追加・変更）、(3) ユーザーの作成と編集（指定されたロールやプロファイルのユーザー管理）。プロファイルの作成や組織設定の変更は代理管理の範囲外です。",
+    "category": "データ管理・コンテンツ管理"
+  }
+];
+
+</script>
+    <script>
+// Ensure testData is loaded
+if (typeof testData === 'undefined') {
+    alert("Error: testData (questions) not loaded. Ensure questions.js is included.");
+}
+
+// Variables & State
+let currentQuestionIndex = 0;
+let userAnswers = {}; // { index: { selected: [], correct: bool } }
+let correctCount = 0;
+let answeredCount = 0;
+let isAnswered = false;
+let startTime = null;
+
+const questions = testData;
+const STORAGE_KEY = 'sf_admin2_quiz_progress_selftestq60';
+
+const DOM = {
+    app: document.getElementById('app'),
+    scoreDisplay: document.getElementById('score-display'),
+    progressDisplay: document.getElementById('progress-display'),
+    progressBar: document.getElementById('progress-bar'),
+    questionTitle: document.getElementById('question-title'),
+    questionText: document.getElementById('question-text'),
+    optionsContainer: document.getElementById('options-container'),
+    feedbackBox: document.getElementById('feedback-box'),
+    btnPrev: document.getElementById('btn-prev'),
+    btnSubmit: document.getElementById('btn-submit'),
+    btnNext: document.getElementById('btn-next'),
+    quizContainer: document.querySelector('.quiz-container')
+};
+
+function letterToIndex(letter) {
+    return letter.toUpperCase().charCodeAt(0) - 65;
+}
+
+function indexToLetter(index) {
+    return String.fromCharCode(65 + index);
+}
+
+function saveProgress() {
+    const data = {
+        currentQuestionIndex,
+        userAnswers,
+        correctCount,
+        answeredCount,
+        startTime: startTime || Date.now()
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function loadProgress() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+        const data = JSON.parse(saved);
+        currentQuestionIndex = data.currentQuestionIndex || 0;
+        userAnswers = data.userAnswers || {};
+        correctCount = data.correctCount || 0;
+        answeredCount = data.answeredCount || 0;
+        startTime = data.startTime || Date.now();
+        return true;
+    }
+    return false;
+}
+
+function initQuiz() {
+    const hasProgress = loadProgress();
+    if (!startTime) startTime = Date.now();
+    
+    if (hasProgress && answeredCount === questions.length) {
+        showResult();
+    } else {
+        loadQuestion(currentQuestionIndex);
+        updateStats();
+    }
+}
+
+function updateStats() {
+    DOM.scoreDisplay.textContent = `Score: ${correctCount} / ${answeredCount}`;
+    DOM.progressDisplay.textContent = `Question: ${currentQuestionIndex + 1} / ${questions.length}`;
+    const progress = ((currentQuestionIndex) / questions.length) * 100;
+    DOM.progressBar.style.width = `${progress}%`;
+}
+
+function loadQuestion(index) {
+    const q = questions[index];
+    const prevResult = userAnswers[index];
+    
+    // Check if multi-choice
+    const correctAnswers = q.answer.split(',').map(s => s.trim()).filter(Boolean);
+    const isMultiChoice = correctAnswers.length > 1;
+    
+    DOM.questionTitle.innerHTML = `Question ${index + 1} ${isMultiChoice ? '<span class="multi-choice-badge">複数選択</span>' : ''}`;
+    DOM.questionText.textContent = q.question;
+    DOM.optionsContainer.innerHTML = '';
+    DOM.feedbackBox.style.display = 'none';
+    
+    if (index === 0) DOM.btnPrev.disabled = true;
+    else DOM.btnPrev.disabled = false;
+
+    q.options.forEach((optText, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.dataset.index = i;
+        const labelStr = indexToLetter(i);
+        btn.innerHTML = `<span class="option-label">${labelStr}.</span> <span class="option-text">${optText}</span>`;
+        
+        if (prevResult) {
+            // Self-test mode: show selection only, no correct/incorrect
+            btn.classList.add('disabled');
+            if (prevResult.selected.includes(i)) btn.classList.add('selected');
+        } else {
+            btn.addEventListener('click', () => handleOptionClick(btn, isMultiChoice));
+        }
+        DOM.optionsContainer.appendChild(btn);
+    });
+
+    if (prevResult) {
+        isAnswered = true;
+        // Self-test mode: show selection but no correct/incorrect feedback
+        DOM.btnSubmit.style.display = 'none';
+        DOM.btnNext.style.display = 'inline-block';
+    } else {
+        isAnswered = false;
+        DOM.btnSubmit.style.display = 'inline-block';
+        DOM.btnNext.style.display = 'none';
+        DOM.btnSubmit.disabled = true;
+    }
+}
+
+function handleOptionClick(btn, isMultiChoice) {
+    if (isAnswered) return;
+    if (isMultiChoice) {
+        btn.classList.toggle('selected');
+    } else {
+        Array.from(DOM.optionsContainer.children).forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+    }
+    const anySelected = DOM.optionsContainer.querySelector('.selected');
+    DOM.btnSubmit.disabled = !anySelected;
+}
+
+function submitAnswer() {
+    if (isAnswered) return;
+    isAnswered = true;
+    
+    const q = questions[currentQuestionIndex];
+    const correctLetterArray = q.answer.split(',').map(s => s.trim().toUpperCase()).filter(Boolean);
+    const correctIndices = correctLetterArray.map(l => letterToIndex(l));
+    
+    const buttons = Array.from(DOM.optionsContainer.children);
+    const selectedIndices = buttons.filter(b => b.classList.contains('selected')).map(b => parseInt(b.dataset.index));
+    
+    const isCorrect = 
+        selectedIndices.length === correctIndices.length &&
+        selectedIndices.every(val => correctIndices.includes(val));
+    
+    // Save result (no visual feedback in self-test mode)
+    userAnswers[currentQuestionIndex] = {
+        selected: selectedIndices,
+        correct: isCorrect
+    };
+    
+    if (isCorrect) correctCount++;
+    answeredCount++;
+    
+    updateStats();
+    saveProgress();
+    
+    // Auto-advance to next question or show results
+    if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+        loadQuestion(currentQuestionIndex);
+        updateStats();
+        saveProgress();
+    } else {
+        showResult();
+    }
+}
+
+function showFeedback(isCorrect, q) {
+    DOM.feedbackBox.style.display = 'block';
+    DOM.feedbackBox.className = `feedback-box ${isCorrect ? 'feedback-correct' : 'feedback-incorrect'}`;
+    let content = `<strong>${isCorrect ? '正解！' : '不正解！'}</strong> <span style="font-size:0.8rem; opacity:0.8">カテゴリ: ${q.category || '一般'}</span><br>正答: ${q.answer}`;
+    if (q.explanation) content += `<br><br><strong>【解説】</strong><br>${q.explanation}`;
+    DOM.feedbackBox.innerHTML = content;
+}
+
+function nextQuestion() {
+    if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+        loadQuestion(currentQuestionIndex);
+        updateStats();
+        saveProgress();
+    } else {
+        showResult();
+    }
+}
+
+function prevQuestion() {
+    if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        loadQuestion(currentQuestionIndex);
+        updateStats();
+    }
+}
+
+function showResult() {
+    DOM.quizContainer.style.display = 'none';
+    const durationMin = Math.round((Date.now() - startTime) / 60000);
+    const scoreRate = Math.round((correctCount / questions.length) * 100);
+    const passThreshold = 65;
+    const isPass = scoreRate >= passThreshold;
+    
+    const catStats = {};
+    questions.forEach((q, i) => {
+        const cat = q.category || '一般';
+        if (!catStats[cat]) catStats[cat] = { total: 0, correct: 0 };
+        catStats[cat].total++;
+        if (userAnswers[i] && userAnswers[i].correct) catStats[cat].correct++;
+    });
+
+    const sortedCats = Object.keys(catStats).map(c => ({ name: c, rate: Math.round((catStats[c].correct / catStats[c].total) * 100) })).sort((a,b) => a.rate - b.rate);
+    const weakest = sortedCats.slice(0, 2);
+    const strongest = sortedCats.slice(-2).reverse();
+
+    let resultHtml = `
+    <div class="results-view">
+        <div class="result-card">
+            <div class="pass-fail-banner ${isPass ? 'pass-banner' : 'fail-banner'}">
+                ${isPass ? 'PASS - 合格圏内' : 'FAIL - 復習が必要です'}
+            </div>
+            <h2>試験結果レポート</h2>
+            <div class="stat-grid">
+                <div class="stat-item"><span class="stat-value">${correctCount} / ${questions.length}</span><span class="stat-label">正解数</span></div>
+                <div class="stat-item"><span class="stat-value">${scoreRate}%</span><span class="stat-label">正解率</span></div>
+                <div class="stat-item"><span class="stat-value">${durationMin}分</span><span class="stat-label">学習時間</span></div>
+            </div>
+            
+            <div class="priority-box">
+                <h4><span style="font-size:1.2rem">⚠️</span> 重点復習エリア</h4>
+                <p>以下のカテゴリの正解率が低くなっています。関連するヘルプドキュメントを確認してください：</p>
+                <ul>
+                    ${weakest.map(w => `<li><strong>${w.name}</strong> (${w.rate}%)</li>`).join('')}
+                </ul>
+            </div>
+        </div>
+
+        <div class="glass-panel">
+            <h3>カテゴリ別分析</h3>
+            <div class="category-stats">
+                <table>
+                    <thead><tr><th>カテゴリ</th><th>正解数</th><th>比率</th></tr></thead>
+                    <tbody>
+                        ${sortedCats.map(c => `<tr><td>${c.name}</td><td>${catStats[c.name].correct}/${catStats[c.name].total}</td><td>${c.rate}%</td></tr>`).join('')}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="glass-panel">
+            <h3>解答履歴一覧</h3>
+            <div class="history-scroll">
+                <table class="answer-history-table">
+                    <thead><tr><th>No</th><th>カテゴリ</th><th>結果</th><th>あなたの解答</th><th>正答</th></tr></thead>
+                    <tbody>
+                        ${questions.map((q, i) => {
+                            const ans = userAnswers[i];
+                            const selectedStr = ans ? ans.selected.map(idx => indexToLetter(idx)).join(',') : '-';
+                            return `<tr>
+                                <td><a href="#" class="history-link" onclick="goToQuestion(${i}); return false;">${i+1}</a></td>
+                                <td style="font-size:0.7rem">${q.category}</td>
+                                <td class="${ans && ans.correct ? 'icon-correct' : 'icon-incorrect'}">${ans && ans.correct ? '○' : '×'}</td>
+                                <td>${selectedStr}</td>
+                                <td>${q.answer}</td>
+                            </tr>`;
+                        }).join('')}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="glass-panel">
+            <h3>知識ポイントのまとめ</h3>
+            <div class="knowledge-summary">
+                ${questions.filter((q, i) => userAnswers[i] && !userAnswers[i].correct).map((q, i) => `
+                    <div class="knowledge-point">
+                        <span class="kp-title">Q${questions.indexOf(q) + 1}: ${q.question.substring(0, 80)}...</span>
+                        <div class="kp-content"><strong>正解: ${q.answer}</strong><br>${q.explanation}</div>
+                    </div>
+                `).join('') || '<p>間違えた問題はありません。完璧です！</p>'}
+            </div>
+        </div>
+
+        <div style="margin-bottom: 3rem; text-align: center;">
+            <button class="btn btn-primary btn-reset" onclick="resetQuiz()">回答をリセットして再挑戦</button>
+        </div>
+    </div>`;
+
+    let resDiv = document.createElement('div');
+    resDiv.id = 'results-screen';
+    resDiv.innerHTML = resultHtml;
+    DOM.app.appendChild(resDiv);
+}
+
+function goToQuestion(index) {
+    const resultsScreen = document.getElementById('results-screen');
+    if (resultsScreen) resultsScreen.remove();
+    DOM.quizContainer.style.display = '';
+    currentQuestionIndex = index;
+    loadQuestion(index);
+    updateStats();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function resetQuiz() {
+    if (confirm('回答履歴をリセットして最初からやり直しますか？')) {
+        localStorage.removeItem(STORAGE_KEY);
+        location.reload();
+    }
+}
+
+DOM.btnSubmit.addEventListener('click', submitAnswer);
+DOM.btnNext.addEventListener('click', nextQuestion);
+DOM.btnPrev.addEventListener('click', prevQuestion);
+
+const glossaryToggle = document.getElementById('glossary-toggle');
+const glossaryBody = document.getElementById('glossary-body');
+glossaryToggle.addEventListener('click', () => {
+    const isShow = glossaryBody.classList.toggle('show');
+    glossaryToggle.innerHTML = isShow ? '<span class="arrow">▲</span> 重要用語集を閉じる' : '<span class="arrow">▼</span> 重要用語集を表示';
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    if(questions && questions.length > 0) {
+        initQuiz();
+    } else {
+        DOM.questionTitle.textContent = "No questions found!";
+    }
+});
+    </script>
+</body>
+</html>
